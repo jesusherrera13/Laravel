@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-12">
-            <h1 :class="{'active': blog.id, 'cosa' :true }">Blogs</h1>
+            <h1>Blogs</h1>
             <router-link :to="{name:'create'}" class="btn btn-primary">
                 <font-awesome-icon icon="fa-solid fa-circle-plus" />
             </router-link>
@@ -14,11 +14,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="blog in blogs">
-                        <td>{{ blog.title }}</td>
-                        <td>{{ blog.content }}</td>
+                    <tr v-for="item in blogs">
+                        <td>{{ item.title }}</td>
+                        <td>{{ item.content }}</td>
                         <td>
-                            <router-link :to="{name:'edit', params: { id: blog.id }}" class="btn btn-warning">
+                            <router-link :to="{name: 'edit', params: { id: item.id }}" class="btn btn-warning">
                                 <font-awesome-icon icon="fa-solid fa-pencil" />
                             </router-link>
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="toggle(blog)">

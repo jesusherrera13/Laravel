@@ -11,8 +11,12 @@
                     <textarea class="form-control" id="content" rows="3" v-model="blog.content"></textarea>
                 </div>
                  <div class="mb-3">
-                    <input type="submit" class="btn btn-primary" value="Save">
-                    <button class="btn btn-warning" @click="this.$router.push('/blogs')">Cancel</button>
+                    <button class="btn btn-primary" value="Save">
+                        <font-awesome-icon icon="fa-solid fa-floppy-disk"></font-awesome-icon>
+                    </button>
+                    <button class="btn btn-warning" @click="this.$router.push('/blogs')">
+                        <font-awesome-icon icon="fa-solid fa-arrow-left"></font-awesome-icon>
+                    </button>
                 </div>
             </form>
         </div>
