@@ -36,13 +36,13 @@ export default {
     },
     methods: {
         async getData() {
-            await axios.get(`${process.env.MIX_API_URL}/api/blog/${this.$route.params.id}`)
+            await axios.get(`${process.env.MIX_APP_URL}/api/blog/${this.$route.params.id}`)
                     .then(response => {
                         this.blog = response.data;
                     });
         },
         async save() {
-            await axios.put(`${process.env.MIX_API_URL}/api/blog/${this.$route.params.id}`, this.blog)
+            await axios.put(`${process.env.MIX_APP_URL}/api/blog/${this.$route.params.id}`, this.blog)
                     .then((response) => {
                         if(response.status == 204) router.push('/blogs');
                     });

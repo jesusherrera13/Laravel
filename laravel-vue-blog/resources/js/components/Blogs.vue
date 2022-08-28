@@ -66,7 +66,7 @@ export default {
     },
     methods: {
         async getData() {
-            let response = await axios.get(`${process.env.MIX_API_URL}/api/blog`);
+            let response = await axios.get(`${process.env.MIX_APP_URL}/api/blog`);
             this.blogs = response.data;
         },
         toggle(blog) {
@@ -74,7 +74,7 @@ export default {
         },
         async deleteBlog() {
             this.del = false;
-            await axios.delete(`${process.env.MIX_API_URL}/api/blog/${this.blog.id}`)
+            await axios.delete(`${process.env.MIX_APP_URL}/api/blog/${this.blog.id}`)
                     .then(response => {
                         this.$refs.Click.click();
                         this.getData();
