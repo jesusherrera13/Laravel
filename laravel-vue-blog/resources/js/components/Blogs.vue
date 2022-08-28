@@ -8,7 +8,6 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
                         <th scope="col">First</th>
                         <th scope="col">Last</th>
                         <th scope="col"></th>
@@ -16,7 +15,6 @@
                 </thead>
                 <tbody>
                     <tr v-for="blog in blogs">
-                        <th scope="row">1</th>
                         <td>{{ blog.title }}</td>
                         <td>{{ blog.content }}</td>
                         <td>
@@ -42,8 +40,8 @@
                         <h3>{{ blog.title }}</h3>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger" @click="deleteBlog">Delete</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" ref="Click">Close</button>
+                        <button type="button" class="btn btn-danger" @click="deleteBlog" v-if="ready">Delete</button>
                     </div>
                     </div>
                 </div>
@@ -59,7 +57,8 @@ export default {
     data() {
         return {
             blogs: [],
-            blog: {}
+            blog: {},
+            deleteable: true
         }
     },
     mounted() {
@@ -74,8 +73,13 @@ export default {
             this.blog = blog;
         },
         async deleteBlog() {
-            // let response = await axios.delete(`http://127.0.0.1:8000/api/blog/${this.blog.id}`);
-            // this.getData();
+            this.deleteable = false;
+            await axios.delete(`${process.env.MIX_API_URL}/api/blog/${this.blog.id}`)
+                    .then(response => {
+                        this.$refs.Click.click();
+                        this.getData();
+                        this.deleteable = true;
+                    });
         },
     }
 }

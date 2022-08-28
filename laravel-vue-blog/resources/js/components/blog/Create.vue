@@ -12,6 +12,7 @@
                 </div>
                  <div class="mb-3">
                     <input type="submit" class="btn btn-primary" value="Save">
+                    <button class="btn btn-warning" @click="$router.push('/blogs')">Cancel</button>
                 </div>
             </form>
         </div>
@@ -32,8 +33,10 @@ export default {
     },
     methods: {
         async save() {
-            let response = await axios.post(`${process.env.MIX_API_URL}/api/blog`, this.blog);
-            if(response.status == 201) router.push('/blogs');
+            await axios.post(`${process.env.MIX_API_URL}/api/blog`, this.blog)
+                    .then(response => {
+                        if(response.status == 201) router.push('/blogs');
+                    });
         }
     }
 }
