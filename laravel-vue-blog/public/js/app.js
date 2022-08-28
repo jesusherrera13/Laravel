@@ -38110,7 +38110,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       blogs: [],
       blog: {},
-      deleteable: true
+      del: true
     };
   },
   mounted: function mounted() {
@@ -38152,14 +38152,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this2.deleteable = false;
+                _this2.del = false;
                 _context2.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("".concat("http://localhost:8000", "/api/blog/").concat(_this2.blog.id)).then(function (response) {
                   _this2.$refs.Click.click();
 
                   _this2.getData();
 
-                  _this2.deleteable = true;
+                  _this2.del = true;
                 });
 
               case 3:
@@ -38276,19 +38276,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var response;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat("http://localhost:8000", "/api/blog/").concat(_this.$route.params.id));
+                return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat("http://localhost:8000", "/api/blog/").concat(_this.$route.params.id)).then(function (response) {
+                  _this.blog = response.data;
+                });
 
               case 2:
-                response = _context.sent;
-                _this.blog = response.data;
-
-              case 4:
               case "end":
                 return _context.stop();
             }
@@ -38300,19 +38297,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        var response;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_0___default().put("".concat("http://localhost:8000", "/api/blog/").concat(_this2.$route.params.id), _this2.blog);
+                return axios__WEBPACK_IMPORTED_MODULE_0___default().put("".concat("http://localhost:8000", "/api/blog/").concat(_this2.$route.params.id), _this2.blog).then(function (response) {
+                  if (response.status == 204) _routes__WEBPACK_IMPORTED_MODULE_1__["default"].push('/blogs');
+                });
 
               case 2:
-                response = _context2.sent;
-                if (response.status == 204) _routes__WEBPACK_IMPORTED_MODULE_1__["default"].push('/blogs');
-
-              case 4:
               case "end":
                 return _context2.stop();
             }
@@ -38563,7 +38557,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_13, "Close", 512
   /* NEED_PATCH */
-  ), _ctx.ready ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+  ), $data.del ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
     key: 0,
     type: "button",
     "class": "btn btn-danger",

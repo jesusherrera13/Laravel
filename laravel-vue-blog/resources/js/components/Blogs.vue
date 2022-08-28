@@ -41,7 +41,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" ref="Click">Close</button>
-                        <button type="button" class="btn btn-danger" @click="deleteBlog" v-if="ready">Delete</button>
+                        <button type="button" class="btn btn-danger" @click="deleteBlog" v-if="del">Delete</button>
                     </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@ export default {
         return {
             blogs: [],
             blog: {},
-            deleteable: true
+            del: true
         }
     },
     mounted() {
@@ -73,12 +73,12 @@ export default {
             this.blog = blog;
         },
         async deleteBlog() {
-            this.deleteable = false;
+            this.del = false;
             await axios.delete(`${process.env.MIX_API_URL}/api/blog/${this.blog.id}`)
                     .then(response => {
                         this.$refs.Click.click();
                         this.getData();
-                        this.deleteable = true;
+                        this.del = true;
                     });
         },
     }
