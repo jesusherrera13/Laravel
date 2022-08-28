@@ -36,11 +36,11 @@ export default {
     },
     methods: {
         async getData() {
-            let response = await axios.get(`http://127.0.0.1:8000/api/blog/${this.$route.params.id}`);
+            let response = await axios.get(`${process.env.MIX_API_URL}/api/blog/${this.$route.params.id}`);
             this.blog = response.data;
         },
         async save() {
-            let response = await axios.put(`http://127.0.0.1:8000/api/blog/${this.$route.params.id}`, this.blog);
+            let response = await axios.put(`${process.env.MIX_API_URL}/api/blog/${this.$route.params.id}`, this.blog);
             if(response.status == 204) router.push('/blogs');
         }
     }

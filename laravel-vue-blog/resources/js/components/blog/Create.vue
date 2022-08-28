@@ -32,7 +32,7 @@ export default {
     },
     methods: {
         async save() {
-            let response = await axios.post('http://127.0.0.1:8000/api/blog', this.blog);
+            let response = await axios.post(`${process.env.MIX_API_URL}/api/blog`, this.blog);
             if(response.status == 201) router.push('/blogs');
         }
     }

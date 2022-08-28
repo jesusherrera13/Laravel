@@ -67,7 +67,7 @@ export default {
     },
     methods: {
         async getData() {
-            let response = await axios.get('http://127.0.0.1:8000/api/blog');
+            let response = await axios.get(`${process.env.MIX_API_URL}/api/blog`);
             this.blogs = response.data;
         },
         toggle(blog) {
