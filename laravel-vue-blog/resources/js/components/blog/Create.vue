@@ -1,6 +1,13 @@
 <template>
     <div class="row">
         <div class="col-12">
+            <div class="alert alert-danger" role="alert" v-if="errors.length">
+                <ul>
+                    <li v-for="error in errors">
+                        {{error}}
+                    </li>
+                </ul>
+            </div>
             <form @submit.prevent="save">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
@@ -32,7 +39,8 @@ export default {
             blog: {
                 title: null,
                 content: null
-            }
+            },
+            errors: []
         }
     },
     methods: {
@@ -40,6 +48,12 @@ export default {
             await axios.post(`${process.env.MIX_APP_URL}/api/blog`, this.blog)
                     .then(response => {
                         if(response.status == 201) router.push('/blogs');
+                    })
+                    .catch(error => {
+                        console.log(error.response.data.errors);
+                        Object.keys(error.response.data.errors).forEach((o) => {
+                            this.errors.push(error.response.data.errors[o][0])
+                        });
                     });
         }
     }

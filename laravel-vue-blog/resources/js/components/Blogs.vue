@@ -21,14 +21,14 @@
                             <router-link :to="{name: 'edit', params: { id: item.id }}" class="btn btn-warning">
                                 <font-awesome-icon icon="fa-solid fa-pencil" />
                             </router-link>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="toggle(blog)">
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="toggle(item)">
                                 <font-awesome-icon icon="fa-solid fa-trash-can" />
                             </button>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                     <div class="modal-header">
@@ -36,7 +36,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Eliminar a:</p>
+                        <p>Delete:</p>
                         <h3>{{ blog.title }}</h3>
                     </div>
                     <div class="modal-footer">
