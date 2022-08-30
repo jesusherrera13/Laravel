@@ -28497,7 +28497,7 @@ function resolveAsset(type, name, warnMissing = true, maybeSelfReference = false
         const Component = instance.type;
         // explicit self name has highest priority
         if (type === COMPONENTS) {
-            const selfName = getComponentName(Component, false /* do not include inferred name to avoid breaking existing code */);
+            const selfName = getComponentName(Component);
             if (selfName &&
                 (selfName === name ||
                     selfName === (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.camelize)(name) ||
@@ -30178,7 +30178,7 @@ function setRef(rawRef, oldRawRef, parentSuspense, vnode, isUnmount = false) {
                         setupState[ref] = value;
                     }
                 }
-                else if (_isRef) {
+                else if ((0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_0__.isRef)(ref)) {
                     ref.value = value;
                     if (rawRef.k)
                         refs[rawRef.k] = value;
@@ -30218,13 +30218,11 @@ function createHydrationFunctions(rendererInternals) {
                     `Performing full mount instead.`);
             patch(null, vnode, container);
             flushPostFlushCbs();
-            container._vnode = vnode;
             return;
         }
         hasMismatch = false;
         hydrateNode(container.firstChild, vnode, null, null, null);
         flushPostFlushCbs();
-        container._vnode = vnode;
         if (hasMismatch && !false) {
             // this error should show up in production
             console.error(`Hydration completed but contains mismatches.`);
@@ -30275,7 +30273,7 @@ function createHydrationFunctions(rendererInternals) {
                 }
                 break;
             case Static:
-                if (domType !== 1 /* ELEMENT */ && domType !== 3 /* TEXT */) {
+                if (domType !== 1 /* ELEMENT */) {
                     nextNode = onMismatch();
                 }
                 else {
@@ -30286,10 +30284,7 @@ function createHydrationFunctions(rendererInternals) {
                     const needToAdoptContent = !vnode.children.length;
                     for (let i = 0; i < vnode.staticCount; i++) {
                         if (needToAdoptContent)
-                            vnode.children +=
-                                nextNode.nodeType === 1 /* ELEMENT */
-                                    ? nextNode.outerHTML
-                                    : nextNode.data;
+                            vnode.children += nextNode.outerHTML;
                         if (i === vnode.staticCount - 1) {
                             vnode.anchor = nextNode;
                         }
@@ -33006,10 +33001,10 @@ function getExposeProxy(instance) {
 }
 const classifyRE = /(?:^|[-_])(\w)/g;
 const classify = (str) => str.replace(classifyRE, c => c.toUpperCase()).replace(/[-_]/g, '');
-function getComponentName(Component, includeInferred = true) {
+function getComponentName(Component) {
     return (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.isFunction)(Component)
         ? Component.displayName || Component.name
-        : Component.name || (includeInferred && Component.__name);
+        : Component.name;
 }
 /* istanbul ignore next */
 function formatComponentName(instance, Component, isRoot = false) {
@@ -33457,7 +33452,7 @@ function isMemoSame(cached, memo) {
 }
 
 // Core API ------------------------------------------------------------------
-const version = "3.2.37";
+const version = "3.2.36";
 const _ssrUtils = {
     createComponentInstance,
     setupComponent,
@@ -33467,7 +33462,7 @@ const _ssrUtils = {
     normalizeVNode
 };
 /**
- * SSR utils for \@vue/server-renderer. Only exposed in ssr-possible builds.
+ * SSR utils for \@vue/server-renderer. Only exposed in cjs builds.
  * @internal
  */
 const ssrUtils = (_ssrUtils );
@@ -38127,7 +38122,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat("http://127.0.0.1:8000", "/api/blog"));
+                return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat("http://localhost:8000", "/api/blog"));
 
               case 2:
                 response = _context.sent;
@@ -38154,7 +38149,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _this2.del = false;
                 _context2.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("".concat("http://127.0.0.1:8000", "/api/blog/").concat(_this2.blog.id)).then(function (response) {
+                return axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("".concat("http://localhost:8000", "/api/blog/").concat(_this2.blog.id)).then(function (response) {
                   _this2.$refs.Click.click();
 
                   _this2.getData();
@@ -38219,10 +38214,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_0___default().post("".concat("http://127.0.0.1:8000", "/api/blog"), _this.blog).then(function (response) {
+                return axios__WEBPACK_IMPORTED_MODULE_0___default().post("".concat("http://localhost:8000", "/api/blog"), _this.blog).then(function (response) {
                   if (response.status == 201) _routes__WEBPACK_IMPORTED_MODULE_1__["default"].push('/blogs');
                 })["catch"](function (error) {
-                  console.log(error.response.data.errors);
                   Object.keys(error.response.data.errors).forEach(function (o) {
                     _this.errors.push(error.response.data.errors[o][0]);
                   });
@@ -38288,7 +38282,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat("http://127.0.0.1:8000", "/api/blog/").concat(_this.$route.params.id)).then(function (response) {
+                return axios__WEBPACK_IMPORTED_MODULE_0___default().get("".concat("http://localhost:8000", "/api/blog/").concat(_this.$route.params.id)).then(function (response) {
                   _this.blog = response.data;
                 });
 
@@ -38309,7 +38303,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios__WEBPACK_IMPORTED_MODULE_0___default().put("".concat("http://127.0.0.1:8000", "/api/blog/").concat(_this2.$route.params.id), _this2.blog).then(function (response) {
+                return axios__WEBPACK_IMPORTED_MODULE_0___default().put("".concat("http://localhost:8000", "/api/blog/").concat(_this2.$route.params.id), _this2.blog).then(function (response) {
                   if (response.status == 204) _routes__WEBPACK_IMPORTED_MODULE_1__["default"].push('/blogs');
                 })["catch"](function (error) {
                   Object.keys(error.response.data.errors).forEach(function (o) {
@@ -38898,7 +38892,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.mjs");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm-bundler.js");
 /* harmony import */ var _components_Home_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/Home.vue */ "./resources/js/components/Home.vue");
 /* harmony import */ var _components_Blogs_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Blogs.vue */ "./resources/js/components/Blogs.vue");
 /* harmony import */ var _components_Contact_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Contact.vue */ "./resources/js/components/Contact.vue");
@@ -62034,13 +62028,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _App_vue_vue_type_template_id_332fccf4__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue?vue&type=template&id=332fccf4 */ "./resources/js/components/App.vue?vue&type=template&id=332fccf4");
 /* harmony import */ var _App_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.vue?vue&type=script&lang=js */ "./resources/js/components/App.vue?vue&type=script&lang=js");
-/* harmony import */ var _home_jesus_Documentos_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var C_Users_Jes_s_Herrera_Documents_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_jesus_Documentos_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_App_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_App_vue_vue_type_template_id_332fccf4__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/App.vue"]])
+const __exports__ = /*#__PURE__*/(0,C_Users_Jes_s_Herrera_Documents_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_App_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_App_vue_vue_type_template_id_332fccf4__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/App.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -62062,13 +62056,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Blogs_vue_vue_type_template_id_0d9b4d36__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Blogs.vue?vue&type=template&id=0d9b4d36 */ "./resources/js/components/Blogs.vue?vue&type=template&id=0d9b4d36");
 /* harmony import */ var _Blogs_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Blogs.vue?vue&type=script&lang=js */ "./resources/js/components/Blogs.vue?vue&type=script&lang=js");
-/* harmony import */ var _home_jesus_Documentos_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var C_Users_Jes_s_Herrera_Documents_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_jesus_Documentos_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Blogs_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Blogs_vue_vue_type_template_id_0d9b4d36__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/Blogs.vue"]])
+const __exports__ = /*#__PURE__*/(0,C_Users_Jes_s_Herrera_Documents_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Blogs_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Blogs_vue_vue_type_template_id_0d9b4d36__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/Blogs.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -62089,12 +62083,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Contact_vue_vue_type_template_id_4c2584f6__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Contact.vue?vue&type=template&id=4c2584f6 */ "./resources/js/components/Contact.vue?vue&type=template&id=4c2584f6");
-/* harmony import */ var _home_jesus_Documentos_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var C_Users_Jes_s_Herrera_Documents_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 const script = {}
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_jesus_Documentos_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__["default"])(script, [['render',_Contact_vue_vue_type_template_id_4c2584f6__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/Contact.vue"]])
+const __exports__ = /*#__PURE__*/(0,C_Users_Jes_s_Herrera_Documents_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__["default"])(script, [['render',_Contact_vue_vue_type_template_id_4c2584f6__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/Contact.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -62115,12 +62109,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Home_vue_vue_type_template_id_f2b6376c__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Home.vue?vue&type=template&id=f2b6376c */ "./resources/js/components/Home.vue?vue&type=template&id=f2b6376c");
-/* harmony import */ var _home_jesus_Documentos_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var C_Users_Jes_s_Herrera_Documents_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 const script = {}
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_jesus_Documentos_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__["default"])(script, [['render',_Home_vue_vue_type_template_id_f2b6376c__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/Home.vue"]])
+const __exports__ = /*#__PURE__*/(0,C_Users_Jes_s_Herrera_Documents_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__["default"])(script, [['render',_Home_vue_vue_type_template_id_f2b6376c__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/Home.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -62142,13 +62136,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Create_vue_vue_type_template_id_774ccaae__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=774ccaae */ "./resources/js/components/blog/Create.vue?vue&type=template&id=774ccaae");
 /* harmony import */ var _Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js */ "./resources/js/components/blog/Create.vue?vue&type=script&lang=js");
-/* harmony import */ var _home_jesus_Documentos_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var C_Users_Jes_s_Herrera_Documents_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_jesus_Documentos_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Create_vue_vue_type_template_id_774ccaae__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/blog/Create.vue"]])
+const __exports__ = /*#__PURE__*/(0,C_Users_Jes_s_Herrera_Documents_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Create_vue_vue_type_template_id_774ccaae__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/blog/Create.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -62170,13 +62164,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Edit_vue_vue_type_template_id_00584188__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Edit.vue?vue&type=template&id=00584188 */ "./resources/js/components/blog/Edit.vue?vue&type=template&id=00584188");
 /* harmony import */ var _Edit_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Edit.vue?vue&type=script&lang=js */ "./resources/js/components/blog/Edit.vue?vue&type=script&lang=js");
-/* harmony import */ var _home_jesus_Documentos_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var C_Users_Jes_s_Herrera_Documents_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,_home_jesus_Documentos_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Edit_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Edit_vue_vue_type_template_id_00584188__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/blog/Edit.vue"]])
+const __exports__ = /*#__PURE__*/(0,C_Users_Jes_s_Herrera_Documents_GitHub_Laravel_laravel_vue_blog_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Edit_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Edit_vue_vue_type_template_id_00584188__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/blog/Edit.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -62345,241 +62339,11 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/vue/dist/vue.esm-bundler.js":
-/*!**************************************************!*\
-  !*** ./node_modules/vue/dist/vue.esm-bundler.js ***!
-  \**************************************************/
+/***/ "./node_modules/vue-router/dist/vue-router.esm-bundler.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/vue-router/dist/vue-router.esm-bundler.js ***!
+  \****************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "BaseTransition": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.BaseTransition),
-/* harmony export */   "Comment": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.Comment),
-/* harmony export */   "EffectScope": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.EffectScope),
-/* harmony export */   "Fragment": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.Fragment),
-/* harmony export */   "KeepAlive": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.KeepAlive),
-/* harmony export */   "ReactiveEffect": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.ReactiveEffect),
-/* harmony export */   "Static": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.Static),
-/* harmony export */   "Suspense": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.Suspense),
-/* harmony export */   "Teleport": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.Teleport),
-/* harmony export */   "Text": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.Text),
-/* harmony export */   "Transition": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.Transition),
-/* harmony export */   "TransitionGroup": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.TransitionGroup),
-/* harmony export */   "VueElement": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.VueElement),
-/* harmony export */   "callWithAsyncErrorHandling": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.callWithAsyncErrorHandling),
-/* harmony export */   "callWithErrorHandling": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.callWithErrorHandling),
-/* harmony export */   "camelize": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.camelize),
-/* harmony export */   "capitalize": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.capitalize),
-/* harmony export */   "cloneVNode": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.cloneVNode),
-/* harmony export */   "compatUtils": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.compatUtils),
-/* harmony export */   "compile": () => (/* binding */ compileToFunction),
-/* harmony export */   "computed": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.computed),
-/* harmony export */   "createApp": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createApp),
-/* harmony export */   "createBlock": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createBlock),
-/* harmony export */   "createCommentVNode": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode),
-/* harmony export */   "createElementBlock": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createElementBlock),
-/* harmony export */   "createElementVNode": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createElementVNode),
-/* harmony export */   "createHydrationRenderer": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createHydrationRenderer),
-/* harmony export */   "createPropsRestProxy": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createPropsRestProxy),
-/* harmony export */   "createRenderer": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createRenderer),
-/* harmony export */   "createSSRApp": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createSSRApp),
-/* harmony export */   "createSlots": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createSlots),
-/* harmony export */   "createStaticVNode": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode),
-/* harmony export */   "createTextVNode": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createTextVNode),
-/* harmony export */   "createVNode": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createVNode),
-/* harmony export */   "customRef": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.customRef),
-/* harmony export */   "defineAsyncComponent": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.defineAsyncComponent),
-/* harmony export */   "defineComponent": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.defineComponent),
-/* harmony export */   "defineCustomElement": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.defineCustomElement),
-/* harmony export */   "defineEmits": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.defineEmits),
-/* harmony export */   "defineExpose": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.defineExpose),
-/* harmony export */   "defineProps": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.defineProps),
-/* harmony export */   "defineSSRCustomElement": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.defineSSRCustomElement),
-/* harmony export */   "devtools": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.devtools),
-/* harmony export */   "effect": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.effect),
-/* harmony export */   "effectScope": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.effectScope),
-/* harmony export */   "getCurrentInstance": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.getCurrentInstance),
-/* harmony export */   "getCurrentScope": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.getCurrentScope),
-/* harmony export */   "getTransitionRawChildren": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.getTransitionRawChildren),
-/* harmony export */   "guardReactiveProps": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.guardReactiveProps),
-/* harmony export */   "h": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.h),
-/* harmony export */   "handleError": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.handleError),
-/* harmony export */   "hydrate": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.hydrate),
-/* harmony export */   "initCustomFormatter": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.initCustomFormatter),
-/* harmony export */   "initDirectivesForSSR": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.initDirectivesForSSR),
-/* harmony export */   "inject": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.inject),
-/* harmony export */   "isMemoSame": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isMemoSame),
-/* harmony export */   "isProxy": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isProxy),
-/* harmony export */   "isReactive": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isReactive),
-/* harmony export */   "isReadonly": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isReadonly),
-/* harmony export */   "isRef": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isRef),
-/* harmony export */   "isRuntimeOnly": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isRuntimeOnly),
-/* harmony export */   "isShallow": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isShallow),
-/* harmony export */   "isVNode": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isVNode),
-/* harmony export */   "markRaw": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.markRaw),
-/* harmony export */   "mergeDefaults": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.mergeDefaults),
-/* harmony export */   "mergeProps": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.mergeProps),
-/* harmony export */   "nextTick": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.nextTick),
-/* harmony export */   "normalizeClass": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.normalizeClass),
-/* harmony export */   "normalizeProps": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.normalizeProps),
-/* harmony export */   "normalizeStyle": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle),
-/* harmony export */   "onActivated": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onActivated),
-/* harmony export */   "onBeforeMount": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onBeforeMount),
-/* harmony export */   "onBeforeUnmount": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onBeforeUnmount),
-/* harmony export */   "onBeforeUpdate": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onBeforeUpdate),
-/* harmony export */   "onDeactivated": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onDeactivated),
-/* harmony export */   "onErrorCaptured": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onErrorCaptured),
-/* harmony export */   "onMounted": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onMounted),
-/* harmony export */   "onRenderTracked": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onRenderTracked),
-/* harmony export */   "onRenderTriggered": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onRenderTriggered),
-/* harmony export */   "onScopeDispose": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onScopeDispose),
-/* harmony export */   "onServerPrefetch": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onServerPrefetch),
-/* harmony export */   "onUnmounted": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onUnmounted),
-/* harmony export */   "onUpdated": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onUpdated),
-/* harmony export */   "openBlock": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.openBlock),
-/* harmony export */   "popScopeId": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.popScopeId),
-/* harmony export */   "provide": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.provide),
-/* harmony export */   "proxyRefs": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.proxyRefs),
-/* harmony export */   "pushScopeId": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.pushScopeId),
-/* harmony export */   "queuePostFlushCb": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.queuePostFlushCb),
-/* harmony export */   "reactive": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.reactive),
-/* harmony export */   "readonly": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.readonly),
-/* harmony export */   "ref": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.ref),
-/* harmony export */   "registerRuntimeCompiler": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.registerRuntimeCompiler),
-/* harmony export */   "render": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "renderList": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.renderList),
-/* harmony export */   "renderSlot": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.renderSlot),
-/* harmony export */   "resolveComponent": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.resolveComponent),
-/* harmony export */   "resolveDirective": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.resolveDirective),
-/* harmony export */   "resolveDynamicComponent": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent),
-/* harmony export */   "resolveFilter": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.resolveFilter),
-/* harmony export */   "resolveTransitionHooks": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.resolveTransitionHooks),
-/* harmony export */   "setBlockTracking": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.setBlockTracking),
-/* harmony export */   "setDevtoolsHook": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.setDevtoolsHook),
-/* harmony export */   "setTransitionHooks": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.setTransitionHooks),
-/* harmony export */   "shallowReactive": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.shallowReactive),
-/* harmony export */   "shallowReadonly": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.shallowReadonly),
-/* harmony export */   "shallowRef": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.shallowRef),
-/* harmony export */   "ssrContextKey": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.ssrContextKey),
-/* harmony export */   "ssrUtils": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.ssrUtils),
-/* harmony export */   "stop": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.stop),
-/* harmony export */   "toDisplayString": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.toDisplayString),
-/* harmony export */   "toHandlerKey": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.toHandlerKey),
-/* harmony export */   "toHandlers": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.toHandlers),
-/* harmony export */   "toRaw": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.toRaw),
-/* harmony export */   "toRef": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.toRef),
-/* harmony export */   "toRefs": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.toRefs),
-/* harmony export */   "transformVNodeArgs": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.transformVNodeArgs),
-/* harmony export */   "triggerRef": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.triggerRef),
-/* harmony export */   "unref": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.unref),
-/* harmony export */   "useAttrs": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.useAttrs),
-/* harmony export */   "useCssModule": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.useCssModule),
-/* harmony export */   "useCssVars": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.useCssVars),
-/* harmony export */   "useSSRContext": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.useSSRContext),
-/* harmony export */   "useSlots": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.useSlots),
-/* harmony export */   "useTransitionState": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.useTransitionState),
-/* harmony export */   "vModelCheckbox": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox),
-/* harmony export */   "vModelDynamic": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.vModelDynamic),
-/* harmony export */   "vModelRadio": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.vModelRadio),
-/* harmony export */   "vModelSelect": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.vModelSelect),
-/* harmony export */   "vModelText": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.vModelText),
-/* harmony export */   "vShow": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.vShow),
-/* harmony export */   "version": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.version),
-/* harmony export */   "warn": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.warn),
-/* harmony export */   "watch": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.watch),
-/* harmony export */   "watchEffect": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.watchEffect),
-/* harmony export */   "watchPostEffect": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.watchPostEffect),
-/* harmony export */   "watchSyncEffect": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.watchSyncEffect),
-/* harmony export */   "withAsyncContext": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withAsyncContext),
-/* harmony export */   "withCtx": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withCtx),
-/* harmony export */   "withDefaults": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withDefaults),
-/* harmony export */   "withDirectives": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withDirectives),
-/* harmony export */   "withKeys": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withKeys),
-/* harmony export */   "withMemo": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withMemo),
-/* harmony export */   "withModifiers": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withModifiers),
-/* harmony export */   "withScopeId": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withScopeId)
-/* harmony export */ });
-/* harmony import */ var _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @vue/runtime-dom */ "./node_modules/@vue/runtime-dom/dist/runtime-dom.esm-bundler.js");
-/* harmony import */ var _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vue/runtime-dom */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
-/* harmony import */ var _vue_compiler_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @vue/compiler-dom */ "./node_modules/@vue/compiler-dom/dist/compiler-dom.esm-bundler.js");
-/* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @vue/shared */ "./node_modules/@vue/shared/dist/shared.esm-bundler.js");
-
-
-
-
-
-
-function initDev() {
-    {
-        (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.initCustomFormatter)();
-    }
-}
-
-// This entry is the "full-build" that includes both the runtime
-if ((true)) {
-    initDev();
-}
-const compileCache = Object.create(null);
-function compileToFunction(template, options) {
-    if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__.isString)(template)) {
-        if (template.nodeType) {
-            template = template.innerHTML;
-        }
-        else {
-            ( true) && (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.warn)(`invalid template option: `, template);
-            return _vue_shared__WEBPACK_IMPORTED_MODULE_2__.NOOP;
-        }
-    }
-    const key = template;
-    const cached = compileCache[key];
-    if (cached) {
-        return cached;
-    }
-    if (template[0] === '#') {
-        const el = document.querySelector(template);
-        if (( true) && !el) {
-            (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.warn)(`Template element not found or is empty: ${template}`);
-        }
-        // __UNSAFE__
-        // Reason: potential execution of JS expressions in in-DOM template.
-        // The user must make sure the in-DOM template is trusted. If it's rendered
-        // by the server, the template should not contain any user data.
-        template = el ? el.innerHTML : ``;
-    }
-    const { code } = (0,_vue_compiler_dom__WEBPACK_IMPORTED_MODULE_3__.compile)(template, (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__.extend)({
-        hoistStatic: true,
-        onError: ( true) ? onError : 0,
-        onWarn: ( true) ? e => onError(e, true) : 0
-    }, options));
-    function onError(err, asWarning = false) {
-        const message = asWarning
-            ? err.message
-            : `Template compilation error: ${err.message}`;
-        const codeFrame = err.loc &&
-            (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__.generateCodeFrame)(template, err.loc.start.offset, err.loc.end.offset);
-        (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.warn)(codeFrame ? `${message}\n${codeFrame}` : message);
-    }
-    // The wildcard import results in a huge object with every export
-    // with keys that cannot be mangled, and can be quite heavy size-wise.
-    // In the global build we know `Vue` is available globally so we can avoid
-    // the wildcard object.
-    const render = (new Function('Vue', code)(_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__));
-    render._rc = true;
-    return (compileCache[key] = render);
-}
-(0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.registerRuntimeCompiler)(compileToFunction);
-
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-router/dist/vue-router.mjs":
-/*!*****************************************************!*\
-  !*** ./node_modules/vue-router/dist/vue-router.mjs ***!
-  \*****************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -62594,7 +62358,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "createWebHashHistory": () => (/* binding */ createWebHashHistory),
 /* harmony export */   "createWebHistory": () => (/* binding */ createWebHistory),
 /* harmony export */   "isNavigationFailure": () => (/* binding */ isNavigationFailure),
-/* harmony export */   "loadRouteLocation": () => (/* binding */ loadRouteLocation),
 /* harmony export */   "matchedRouteKey": () => (/* binding */ matchedRouteKey),
 /* harmony export */   "onBeforeRouteLeave": () => (/* binding */ onBeforeRouteLeave),
 /* harmony export */   "onBeforeRouteUpdate": () => (/* binding */ onBeforeRouteUpdate),
@@ -62611,35 +62374,72 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _vue_devtools_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vue/devtools-api */ "./node_modules/@vue/devtools-api/lib/esm/index.js");
 /*!
-  * vue-router v4.1.5
+  * vue-router v4.0.13
   * (c) 2022 Eduardo San Martin Morote
   * @license MIT
   */
 
 
 
+const hasSymbol = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol';
+const PolySymbol = (name) => 
+// vr = vue router
+hasSymbol
+    ? Symbol(( true) ? '[vue-router]: ' + name : 0)
+    : (( true) ? '[vue-router]: ' : 0) + name;
+// rvlm = Router View Location Matched
+/**
+ * RouteRecord being rendered by the closest ancestor Router View. Used for
+ * `onBeforeRouteUpdate` and `onBeforeRouteLeave`. rvlm stands for Router View
+ * Location Matched
+ *
+ * @internal
+ */
+const matchedRouteKey = /*#__PURE__*/ PolySymbol(( true) ? 'router view location matched' : 0);
+/**
+ * Allows overriding the router view depth to control which component in
+ * `matched` is rendered. rvd stands for Router View Depth
+ *
+ * @internal
+ */
+const viewDepthKey = /*#__PURE__*/ PolySymbol(( true) ? 'router view depth' : 0);
+/**
+ * Allows overriding the router instance returned by `useRouter` in tests. r
+ * stands for router
+ *
+ * @internal
+ */
+const routerKey = /*#__PURE__*/ PolySymbol(( true) ? 'router' : 0);
+/**
+ * Allows overriding the current route returned by `useRoute` in tests. rl
+ * stands for route location
+ *
+ * @internal
+ */
+const routeLocationKey = /*#__PURE__*/ PolySymbol(( true) ? 'route location' : 0);
+/**
+ * Allows overriding the current route used by router-view. Internally this is
+ * used when the `route` prop is passed.
+ *
+ * @internal
+ */
+const routerViewLocationKey = /*#__PURE__*/ PolySymbol(( true) ? 'router view location' : 0);
+
 const isBrowser = typeof window !== 'undefined';
 
 function isESModule(obj) {
-    return obj.__esModule || obj[Symbol.toStringTag] === 'Module';
+    return obj.__esModule || (hasSymbol && obj[Symbol.toStringTag] === 'Module');
 }
 const assign = Object.assign;
 function applyToParams(fn, params) {
     const newParams = {};
     for (const key in params) {
         const value = params[key];
-        newParams[key] = isArray(value)
-            ? value.map(fn)
-            : fn(value);
+        newParams[key] = Array.isArray(value) ? value.map(fn) : fn(value);
     }
     return newParams;
 }
 const noop = () => { };
-/**
- * Typesafe alternative to Array.isArray
- * https://github.com/microsoft/TypeScript/pull/48228
- */
-const isArray = Array.isArray;
 
 function warn(msg) {
     // avoid using ...args as it breaks in older Edge builds
@@ -62650,7 +62450,7 @@ function warn(msg) {
 const TRAILING_SLASH_RE = /\/$/;
 const removeTrailingSlash = (path) => path.replace(TRAILING_SLASH_RE, '');
 /**
- * Transforms a URI into a normalized history location
+ * Transforms an URI into a normalized history location
  *
  * @param parseQuery
  * @param location - URI to normalize
@@ -62661,13 +62461,8 @@ const removeTrailingSlash = (path) => path.replace(TRAILING_SLASH_RE, '');
 function parseURL(parseQuery, location, currentLocation = '/') {
     let path, query = {}, searchString = '', hash = '';
     // Could use URL and URLSearchParams but IE 11 doesn't support it
-    // TODO: move to new URL()
-    const hashPos = location.indexOf('#');
-    let searchPos = location.indexOf('?');
-    // the hash appears before the search, so it's not part of the search string
-    if (hashPos < searchPos && hashPos >= 0) {
-        searchPos = -1;
-    }
+    const searchPos = location.indexOf('?');
+    const hashPos = location.indexOf('#', searchPos > -1 ? searchPos : 0);
     if (searchPos > -1) {
         path = location.slice(0, searchPos);
         searchString = location.slice(searchPos + 1, hashPos > -1 ? hashPos : location.length);
@@ -62699,7 +62494,8 @@ function stringifyURL(stringifyQuery, location) {
     return location.path + (query && '?') + query + (location.hash || '');
 }
 /**
- * Strips off the base from the beginning of a location.pathname in a non-case-sensitive way.
+ * Strips off the base from the beginning of a location.pathname in a non
+ * case-sensitive way.
  *
  * @param pathname - location.pathname
  * @param base - base to strip off
@@ -62751,9 +62547,9 @@ function isSameRouteLocationParams(a, b) {
     return true;
 }
 function isSameRouteLocationParamsValue(a, b) {
-    return isArray(a)
+    return Array.isArray(a)
         ? isEquivalentArray(a, b)
-        : isArray(b)
+        : Array.isArray(b)
             ? isEquivalentArray(b, a)
             : a === b;
 }
@@ -62765,7 +62561,7 @@ function isSameRouteLocationParamsValue(a, b) {
  * @param b - array of values or a single value
  */
 function isEquivalentArray(a, b) {
-    return isArray(b)
+    return Array.isArray(b)
         ? a.length === b.length && a.every((value, i) => value === b[i])
         : a.length === 1 && a[0] === b;
 }
@@ -62791,24 +62587,18 @@ function resolveRelativePath(to, from) {
     let segment;
     for (toPosition = 0; toPosition < toSegments.length; toPosition++) {
         segment = toSegments[toPosition];
-        // we stay on the same position
-        if (segment === '.')
+        // can't go below zero
+        if (position === 1 || segment === '.')
             continue;
-        // go up in the from array
-        if (segment === '..') {
-            // we can't go below zero, but we still need to increment toPosition
-            if (position > 1)
-                position--;
-            // continue
-        }
-        // we reached a non-relative path, we stop here
+        if (segment === '..')
+            position--;
+        // found something that is not relative path
         else
             break;
     }
     return (fromSegments.slice(0, position).join('/') +
         '/' +
         toSegments
-            // ensure we use at least the last element in the toSegments
             .slice(toPosition - (toPosition === toSegments.length ? 1 : 0))
             .join('/'));
 }
@@ -63038,7 +62828,7 @@ function useHistoryListeners(base, historyState, currentLocation, replace) {
         pauseState = currentLocation.value;
     }
     function listen(callback) {
-        // set up the listener and prepare teardown callbacks
+        // setup the listener and prepare teardown callbacks
         listeners.push(callback);
         const teardown = () => {
             const index = listeners.indexOf(callback);
@@ -63061,7 +62851,7 @@ function useHistoryListeners(base, historyState, currentLocation, replace) {
         window.removeEventListener('popstate', popStateHandler);
         window.removeEventListener('beforeunload', beforeUnloadListener);
     }
-    // set up the listeners and prepare teardown callbacks
+    // setup the listeners and prepare teardown callbacks
     window.addEventListener('popstate', popStateHandler);
     window.addEventListener('beforeunload', beforeUnloadListener);
     return {
@@ -63099,14 +62889,14 @@ function useHistoryStateNavigation(base) {
             // the length is off by one, we need to decrease it
             position: history.length - 1,
             replaced: true,
-            // don't add a scroll as the user may have an anchor, and we want
+            // don't add a scroll as the user may have an anchor and we want
             // scrollBehavior to be triggered without a saved position
             scroll: null,
         }, true);
     }
     function changeLocation(to, state, replace) {
         /**
-         * if a base tag is provided, and we are on a normal domain, we have to
+         * if a base tag is provided and we are on a normal domain, we have to
          * respect the provided `base` attribute because pushState() will use it and
          * potentially erase anything before the `#` like at
          * https://github.com/vuejs/router/issues/685 where a base of
@@ -63203,7 +62993,7 @@ function createWebHistory(base) {
 }
 
 /**
- * Creates an in-memory based history. The main purpose of this history is to handle SSR. It starts in a special location that is nowhere.
+ * Creates a in-memory based history. The main purpose of this history is to handle SSR. It starts in a special location that is nowhere.
  * It's up to the user to replace that location with the starter location by either calling `router.push` or `router.replace`.
  *
  * @param base - Base applied to all urls, defaults to '/'
@@ -63288,13 +63078,15 @@ function createMemoryHistory(base = '') {
 }
 
 /**
- * Creates a hash history. Useful for web applications with no host (e.g. `file://`) or when configuring a server to
- * handle any URL is not possible.
+ * Creates a hash history. Useful for web applications with no host (e.g.
+ * `file://`) or when configuring a server to handle any URL is not possible.
  *
- * @param base - optional base to provide. Defaults to `location.pathname + location.search` If there is a `<base>` tag
- * in the `head`, its value will be ignored in favor of this parameter **but note it affects all the history.pushState()
- * calls**, meaning that if you use a `<base>` tag, it's `href` value **has to match this parameter** (ignoring anything
- * after the `#`).
+ * @param base - optional base to provide. Defaults to `location.pathname +
+ * location.search` If there is a `<base>` tag in the `head`, its value will be
+ * ignored in favor of this parameter **but note it affects all the
+ * history.pushState() calls**, meaning that if you use a `<base>` tag, it's
+ * `href` value **has to match this parameter** (ignoring anything after the
+ * `#`).
  *
  * @example
  * ```js
@@ -63359,7 +63151,7 @@ const START_LOCATION_NORMALIZED = {
     redirectedFrom: undefined,
 };
 
-const NavigationFailureSymbol = Symbol(( true) ? 'navigation failure' : 0);
+const NavigationFailureSymbol = /*#__PURE__*/ PolySymbol(( true) ? 'navigation failure' : 0);
 /**
  * Enumeration with all possible types for navigation failures. Can be passed to
  * {@link isNavigationFailure} to check for specific failures.
@@ -63384,21 +63176,21 @@ var NavigationFailureType;
 })(NavigationFailureType || (NavigationFailureType = {}));
 // DEV only debug messages
 const ErrorTypeMessages = {
-    [1 /* ErrorTypes.MATCHER_NOT_FOUND */]({ location, currentLocation }) {
+    [1 /* MATCHER_NOT_FOUND */]({ location, currentLocation }) {
         return `No match for\n ${JSON.stringify(location)}${currentLocation
             ? '\nwhile being at\n' + JSON.stringify(currentLocation)
             : ''}`;
     },
-    [2 /* ErrorTypes.NAVIGATION_GUARD_REDIRECT */]({ from, to, }) {
+    [2 /* NAVIGATION_GUARD_REDIRECT */]({ from, to, }) {
         return `Redirected from "${from.fullPath}" to "${stringifyRoute(to)}" via a navigation guard.`;
     },
-    [4 /* ErrorTypes.NAVIGATION_ABORTED */]({ from, to }) {
+    [4 /* NAVIGATION_ABORTED */]({ from, to }) {
         return `Navigation aborted from "${from.fullPath}" to "${to.fullPath}" via a navigation guard.`;
     },
-    [8 /* ErrorTypes.NAVIGATION_CANCELLED */]({ from, to }) {
+    [8 /* NAVIGATION_CANCELLED */]({ from, to }) {
         return `Navigation cancelled from "${from.fullPath}" to "${to.fullPath}" with a new navigation.`;
     },
-    [16 /* ErrorTypes.NAVIGATION_DUPLICATED */]({ from, to }) {
+    [16 /* NAVIGATION_DUPLICATED */]({ from, to }) {
         return `Avoided redundant navigation to current location: "${from.fullPath}".`;
     },
 };
@@ -63431,7 +63223,7 @@ function stringifyRoute(to) {
     return JSON.stringify(location, null, 2);
 }
 
-// default pattern for a param: non-greedy everything but /
+// default pattern for a param: non greedy everything but /
 const BASE_PARAM_PATTERN = '[^/]+?';
 const BASE_PATH_PARSER_OPTIONS = {
     sensitive: false,
@@ -63458,23 +63250,23 @@ function tokensToParser(segments, extraOptions) {
     const keys = [];
     for (const segment of segments) {
         // the root segment needs special treatment
-        const segmentScores = segment.length ? [] : [90 /* PathScore.Root */];
+        const segmentScores = segment.length ? [] : [90 /* Root */];
         // allow trailing slash
         if (options.strict && !segment.length)
             pattern += '/';
         for (let tokenIndex = 0; tokenIndex < segment.length; tokenIndex++) {
             const token = segment[tokenIndex];
-            // resets the score if we are inside a sub-segment /:a-other-:b
-            let subSegmentScore = 40 /* PathScore.Segment */ +
-                (options.sensitive ? 0.25 /* PathScore.BonusCaseSensitive */ : 0);
-            if (token.type === 0 /* TokenType.Static */) {
+            // resets the score if we are inside a sub segment /:a-other-:b
+            let subSegmentScore = 40 /* Segment */ +
+                (options.sensitive ? 0.25 /* BonusCaseSensitive */ : 0);
+            if (token.type === 0 /* Static */) {
                 // prepend the slash if we are starting a new segment
                 if (!tokenIndex)
                     pattern += '/';
                 pattern += token.value.replace(REGEX_CHARS_RE, '\\$&');
-                subSegmentScore += 40 /* PathScore.Static */;
+                subSegmentScore += 40 /* Static */;
             }
-            else if (token.type === 1 /* TokenType.Param */) {
+            else if (token.type === 1 /* Param */) {
                 const { value, repeatable, optional, regexp } = token;
                 keys.push({
                     name: value,
@@ -63484,7 +63276,7 @@ function tokensToParser(segments, extraOptions) {
                 const re = regexp ? regexp : BASE_PARAM_PATTERN;
                 // the user provided a custom regexp /:id(\\d+)
                 if (re !== BASE_PARAM_PATTERN) {
-                    subSegmentScore += 10 /* PathScore.BonusCustomRegExp */;
+                    subSegmentScore += 10 /* BonusCustomRegExp */;
                     // make sure the regexp is valid before using it
                     try {
                         new RegExp(`(${re})`);
@@ -63507,13 +63299,13 @@ function tokensToParser(segments, extraOptions) {
                 if (optional)
                     subPattern += '?';
                 pattern += subPattern;
-                subSegmentScore += 20 /* PathScore.Dynamic */;
+                subSegmentScore += 20 /* Dynamic */;
                 if (optional)
-                    subSegmentScore += -8 /* PathScore.BonusOptional */;
+                    subSegmentScore += -8 /* BonusOptional */;
                 if (repeatable)
-                    subSegmentScore += -20 /* PathScore.BonusRepeatable */;
+                    subSegmentScore += -20 /* BonusRepeatable */;
                 if (re === '.*')
-                    subSegmentScore += -50 /* PathScore.BonusWildcard */;
+                    subSegmentScore += -50 /* BonusWildcard */;
             }
             segmentScores.push(subSegmentScore);
         }
@@ -63524,7 +63316,7 @@ function tokensToParser(segments, extraOptions) {
     // only apply the strict bonus to the last score
     if (options.strict && options.end) {
         const i = score.length - 1;
-        score[i][score[i].length - 1] += 0.7000000000000001 /* PathScore.BonusStrict */;
+        score[i][score[i].length - 1] += 0.7000000000000001 /* BonusStrict */;
     }
     // TODO: dev only warn double trailing slash
     if (!options.strict)
@@ -63556,21 +63348,19 @@ function tokensToParser(segments, extraOptions) {
                 path += '/';
             avoidDuplicatedSlash = false;
             for (const token of segment) {
-                if (token.type === 0 /* TokenType.Static */) {
+                if (token.type === 0 /* Static */) {
                     path += token.value;
                 }
-                else if (token.type === 1 /* TokenType.Param */) {
+                else if (token.type === 1 /* Param */) {
                     const { value, repeatable, optional } = token;
                     const param = value in params ? params[value] : '';
-                    if (isArray(param) && !repeatable) {
+                    if (Array.isArray(param) && !repeatable)
                         throw new Error(`Provided param "${value}" is an array but it is not repeatable (* or + modifiers)`);
-                    }
-                    const text = isArray(param)
-                        ? param.join('/')
-                        : param;
+                    const text = Array.isArray(param) ? param.join('/') : param;
                     if (!text) {
                         if (optional) {
-                            // if we have more than one optional param like /:a?-static we don't need to care about the optional param
+                            // if we have more than one optional param like /:a?-static we
+                            // don't need to care about the optional param
                             if (segment.length < 2) {
                                 // remove the last slash as we could be at the end
                                 if (path.endsWith('/'))
@@ -63587,8 +63377,7 @@ function tokensToParser(segments, extraOptions) {
                 }
             }
         }
-        // avoid empty path when we have multiple optional params
-        return path || '/';
+        return path;
     }
     return {
         re,
@@ -63619,12 +63408,12 @@ function compareScoreArray(a, b) {
     // if the last subsegment was Static, the shorter segments should be sorted first
     // otherwise sort the longest segment first
     if (a.length < b.length) {
-        return a.length === 1 && a[0] === 40 /* PathScore.Static */ + 40 /* PathScore.Segment */
+        return a.length === 1 && a[0] === 40 /* Static */ + 40 /* Segment */
             ? -1
             : 1;
     }
     else if (a.length > b.length) {
-        return b.length === 1 && b[0] === 40 /* PathScore.Static */ + 40 /* PathScore.Segment */
+        return b.length === 1 && b[0] === 40 /* Static */ + 40 /* Segment */
             ? 1
             : -1;
     }
@@ -63648,12 +63437,6 @@ function comparePathParserScore(a, b) {
             return comp;
         i++;
     }
-    if (Math.abs(bScore.length - aScore.length) === 1) {
-        if (isLastScoreNegative(aScore))
-            return 1;
-        if (isLastScoreNegative(bScore))
-            return -1;
-    }
     // if a and b share the same score entries but b has more, sort b first
     return bScore.length - aScore.length;
     // this is the ternary version
@@ -63663,19 +63446,9 @@ function comparePathParserScore(a, b) {
     //   ? -1
     //   : 0
 }
-/**
- * This allows detecting splats at the end of a path: /home/:id(.*)*
- *
- * @param score - score to check
- * @returns true if the last entry is negative
- */
-function isLastScoreNegative(score) {
-    const last = score[score.length - 1];
-    return score.length > 0 && last[last.length - 1] < 0;
-}
 
 const ROOT_TOKEN = {
-    type: 0 /* TokenType.Static */,
+    type: 0 /* Static */,
     value: '',
 };
 const VALID_PARAM_RE = /[a-zA-Z0-9_]/;
@@ -63696,7 +63469,7 @@ function tokenizePath(path) {
     function crash(message) {
         throw new Error(`ERR (${state})/"${buffer}": ${message}`);
     }
-    let state = 0 /* TokenizerState.Static */;
+    let state = 0 /* Static */;
     let previousState = state;
     const tokens = [];
     // the segment will always be valid because we get into the initial state
@@ -63718,19 +63491,19 @@ function tokenizePath(path) {
     function consumeBuffer() {
         if (!buffer)
             return;
-        if (state === 0 /* TokenizerState.Static */) {
+        if (state === 0 /* Static */) {
             segment.push({
-                type: 0 /* TokenType.Static */,
+                type: 0 /* Static */,
                 value: buffer,
             });
         }
-        else if (state === 1 /* TokenizerState.Param */ ||
-            state === 2 /* TokenizerState.ParamRegExp */ ||
-            state === 3 /* TokenizerState.ParamRegExpEnd */) {
+        else if (state === 1 /* Param */ ||
+            state === 2 /* ParamRegExp */ ||
+            state === 3 /* ParamRegExpEnd */) {
             if (segment.length > 1 && (char === '*' || char === '+'))
                 crash(`A repeatable param (${buffer}) must be alone in its segment. eg: '/:ids+.`);
             segment.push({
-                type: 1 /* TokenType.Param */,
+                type: 1 /* Param */,
                 value: buffer,
                 regexp: customRe,
                 repeatable: char === '*' || char === '+',
@@ -63747,13 +63520,13 @@ function tokenizePath(path) {
     }
     while (i < path.length) {
         char = path[i++];
-        if (char === '\\' && state !== 2 /* TokenizerState.ParamRegExp */) {
+        if (char === '\\' && state !== 2 /* ParamRegExp */) {
             previousState = state;
-            state = 4 /* TokenizerState.EscapeNext */;
+            state = 4 /* EscapeNext */;
             continue;
         }
         switch (state) {
-            case 0 /* TokenizerState.Static */:
+            case 0 /* Static */:
                 if (char === '/') {
                     if (buffer) {
                         consumeBuffer();
@@ -63762,32 +63535,32 @@ function tokenizePath(path) {
                 }
                 else if (char === ':') {
                     consumeBuffer();
-                    state = 1 /* TokenizerState.Param */;
+                    state = 1 /* Param */;
                 }
                 else {
                     addCharToBuffer();
                 }
                 break;
-            case 4 /* TokenizerState.EscapeNext */:
+            case 4 /* EscapeNext */:
                 addCharToBuffer();
                 state = previousState;
                 break;
-            case 1 /* TokenizerState.Param */:
+            case 1 /* Param */:
                 if (char === '(') {
-                    state = 2 /* TokenizerState.ParamRegExp */;
+                    state = 2 /* ParamRegExp */;
                 }
                 else if (VALID_PARAM_RE.test(char)) {
                     addCharToBuffer();
                 }
                 else {
                     consumeBuffer();
-                    state = 0 /* TokenizerState.Static */;
+                    state = 0 /* Static */;
                     // go back one character if we were not modifying
                     if (char !== '*' && char !== '?' && char !== '+')
                         i--;
                 }
                 break;
-            case 2 /* TokenizerState.ParamRegExp */:
+            case 2 /* ParamRegExp */:
                 // TODO: is it worth handling nested regexp? like :p(?:prefix_([^/]+)_suffix)
                 // it already works by escaping the closing )
                 // https://paths.esm.dev/?p=AAMeJbiAwQEcDKbAoAAkP60PG2R6QAvgNaA6AFACM2ABuQBB#
@@ -63798,16 +63571,16 @@ function tokenizePath(path) {
                     if (customRe[customRe.length - 1] == '\\')
                         customRe = customRe.slice(0, -1) + char;
                     else
-                        state = 3 /* TokenizerState.ParamRegExpEnd */;
+                        state = 3 /* ParamRegExpEnd */;
                 }
                 else {
                     customRe += char;
                 }
                 break;
-            case 3 /* TokenizerState.ParamRegExpEnd */:
+            case 3 /* ParamRegExpEnd */:
                 // same as finalizing a param
                 consumeBuffer();
-                state = 0 /* TokenizerState.Static */;
+                state = 0 /* Static */;
                 // go back one character if we were not modifying
                 if (char !== '*' && char !== '?' && char !== '+')
                     i--;
@@ -63818,7 +63591,7 @@ function tokenizePath(path) {
                 break;
         }
     }
-    if (state === 2 /* TokenizerState.ParamRegExp */)
+    if (state === 2 /* ParamRegExp */)
         crash(`Unfinished custom RegExp for param "${buffer}"`);
     consumeBuffer();
     finalizeSegment();
@@ -63873,9 +63646,6 @@ function createRouterMatcher(routes, globalOptions) {
         // used later on to remove by name
         const isRootAdd = !originalRecord;
         const mainNormalizedRecord = normalizeRouteRecord(record);
-        if ((true)) {
-            checkChildMissingNameWithEmptyPath(mainNormalizedRecord, parent);
-        }
         // we might be the child of an alias
         mainNormalizedRecord.aliasOf = originalRecord && originalRecord.record;
         const options = mergeOptions(globalOptions, record);
@@ -63919,11 +63689,11 @@ function createRouterMatcher(routes, globalOptions) {
                 throw new Error('Catch all routes ("*") must now be defined using a param with a custom regexp.\n' +
                     'See more at https://next.router.vuejs.org/guide/migration/#removed-star-or-catch-all-routes.');
             }
-            // create the object beforehand, so it can be passed to children
+            // create the object before hand so it can be passed to children
             matcher = createRouteRecordMatcher(normalizedRecord, parent, options);
             if (( true) && parent && path[0] === '/')
                 checkMissingParamsInAbsolutePath(matcher, parent);
-            // if we are an alias we must tell the original record that we exist,
+            // if we are an alias we must tell the original record that we exist
             // so we can be removed
             if (originalRecord) {
                 originalRecord.alias.push(matcher);
@@ -63941,14 +63711,14 @@ function createRouterMatcher(routes, globalOptions) {
                 if (isRootAdd && record.name && !isAliasRecord(matcher))
                     removeRoute(record.name);
             }
-            if (mainNormalizedRecord.children) {
+            if ('children' in mainNormalizedRecord) {
                 const children = mainNormalizedRecord.children;
                 for (let i = 0; i < children.length; i++) {
                     addRoute(children[i], matcher, originalRecord && originalRecord.children[i]);
                 }
             }
             // if there was no original record, then the first one was not an alias and all
-            // other aliases (if any) need to reference this record when adding children
+            // other alias (if any) need to reference this record when adding children
             originalRecord = originalRecord || matcher;
             // TODO: add normalized records for more flexibility
             // if (parent && isAliasRecord(originalRecord)) {
@@ -64009,27 +63779,16 @@ function createRouterMatcher(routes, globalOptions) {
         if ('name' in location && location.name) {
             matcher = matcherMap.get(location.name);
             if (!matcher)
-                throw createRouterError(1 /* ErrorTypes.MATCHER_NOT_FOUND */, {
+                throw createRouterError(1 /* MATCHER_NOT_FOUND */, {
                     location,
                 });
-            // warn if the user is passing invalid params so they can debug it better when they get removed
-            if ((true)) {
-                const invalidParams = Object.keys(location.params || {}).filter(paramName => !matcher.keys.find(k => k.name === paramName));
-                if (invalidParams.length) {
-                    warn(`Discarded invalid param(s) "${invalidParams.join('", "')}" when navigating. See https://github.com/vuejs/router/blob/main/packages/router/CHANGELOG.md#414-2022-08-22 for more details.`);
-                }
-            }
             name = matcher.record.name;
             params = assign(
             // paramsFromLocation is a new object
             paramsFromLocation(currentLocation.params, 
             // only keep params that exist in the resolved location
             // TODO: only keep optional params coming from a parent record
-            matcher.keys.filter(k => !k.optional).map(k => k.name)), 
-            // discard any existing params in the current location that do not exist here
-            // #1497 this ensures better active/exact matching
-            location.params &&
-                paramsFromLocation(location.params, matcher.keys.map(k => k.name)));
+            matcher.keys.filter(k => !k.optional).map(k => k.name)), location.params);
             // throws if cannot be stringified
             path = matcher.stringify(params);
         }
@@ -64043,6 +63802,7 @@ function createRouterMatcher(routes, globalOptions) {
             matcher = matchers.find(m => m.re.test(path));
             // matcher should have a value after the loop
             if (matcher) {
+                // TODO: dev warning of unused params if provided
                 // we know the matcher works because we tested the regexp
                 params = matcher.parse(path);
                 name = matcher.record.name;
@@ -64055,7 +63815,7 @@ function createRouterMatcher(routes, globalOptions) {
                 ? matcherMap.get(currentLocation.name)
                 : matchers.find(m => m.re.test(currentLocation.path));
             if (!matcher)
-                throw createRouterError(1 /* ErrorTypes.MATCHER_NOT_FOUND */, {
+                throw createRouterError(1 /* MATCHER_NOT_FOUND */, {
                     location,
                     currentLocation,
                 });
@@ -64113,8 +63873,8 @@ function normalizeRouteRecord(record) {
         updateGuards: new Set(),
         enterCallbacks: {},
         components: 'components' in record
-            ? record.components || null
-            : record.component && { default: record.component },
+            ? record.components || {}
+            : { default: record.component },
     };
 }
 /**
@@ -64124,7 +63884,7 @@ function normalizeRouteRecord(record) {
  */
 function normalizeRecordProps(record) {
     const propsObject = {};
-    // props does not exist on redirect records, but we can set false directly
+    // props does not exist on redirect records but we can set false directly
     const props = record.props || false;
     if ('component' in record) {
         propsObject.default = props;
@@ -64178,31 +63938,17 @@ function isSameParam(a, b) {
 function checkSameParams(a, b) {
     for (const key of a.keys) {
         if (!key.optional && !b.keys.find(isSameParam.bind(null, key)))
-            return warn(`Alias "${b.record.path}" and the original record: "${a.record.path}" must have the exact same param named "${key.name}"`);
+            return warn(`Alias "${b.record.path}" and the original record: "${a.record.path}" should have the exact same param named "${key.name}"`);
     }
     for (const key of b.keys) {
         if (!key.optional && !a.keys.find(isSameParam.bind(null, key)))
-            return warn(`Alias "${b.record.path}" and the original record: "${a.record.path}" must have the exact same param named "${key.name}"`);
-    }
-}
-/**
- * A route with a name and a child with an empty path without a name should warn when adding the route
- *
- * @param mainNormalizedRecord - RouteRecordNormalized
- * @param parent - RouteRecordMatcher
- */
-function checkChildMissingNameWithEmptyPath(mainNormalizedRecord, parent) {
-    if (parent &&
-        parent.record.name &&
-        !mainNormalizedRecord.name &&
-        !mainNormalizedRecord.path) {
-        warn(`The route named "${String(parent.record.name)}" has a child without a name and an empty path. Using that name won't render the empty path child so you probably want to move the name to the child instead. If this is intentional, add a name to the child route to remove the warning.`);
+            return warn(`Alias "${b.record.path}" and the original record: "${a.record.path}" should have the exact same param named "${key.name}"`);
     }
 }
 function checkMissingParamsInAbsolutePath(record, parent) {
     for (const key of parent.keys) {
         if (!record.keys.find(isSameParam.bind(null, key)))
-            return warn(`Absolute path "${record.record.path}" must have the exact same param named "${key.name}" as its parent "${parent.record.path}".`);
+            return warn(`Absolute path "${record.record.path}" should have the exact same param named "${key.name}" as its parent "${parent.record.path}".`);
     }
 }
 function isRecordChildOf(record, parent) {
@@ -64216,7 +63962,7 @@ function isRecordChildOf(record, parent) {
  * On top of that, the RFC3986 (https://tools.ietf.org/html/rfc3986#section-2.2)
  * defines some extra characters to be encoded. Most browsers do not encode them
  * in encodeURI https://github.com/whatwg/url/issues/369, so it may be safer to
- * also encode `!'()*`. Leaving un-encoded only ASCII alphanumeric(`a-zA-Z0-9`)
+ * also encode `!'()*`. Leaving unencoded only ASCII alphanumeric(`a-zA-Z0-9`)
  * plus `-._~`. This extra safety should be applied to query by patching the
  * string returned by encodeURIComponent encodeURI also encodes `[\]^`. `\`
  * should be encoded to avoid ambiguity. Browsers (IE, FF, C) transform a `\`
@@ -64240,7 +63986,7 @@ const PLUS_RE = /\+/g; // %2B
  * application/x-www-form-urlencoded
  * (https://url.spec.whatwg.org/#urlencoded-parsing) and most browsers seems lo
  * leave the plus character as is in queries. To be more flexible, we allow the
- * plus character on the query, but it can also be manually encoded by the user.
+ * plus character on the query but it can also be manually encoded by the user.
  *
  * Resources:
  * - https://url.spec.whatwg.org/#urlencoded-parsing
@@ -64372,7 +64118,7 @@ function parseQuery(search) {
         if (key in query) {
             // an extra variable for ts types
             let currentValue = query[key];
-            if (!isArray(currentValue)) {
+            if (!Array.isArray(currentValue)) {
                 currentValue = query[key] = [currentValue];
             }
             currentValue.push(value);
@@ -64405,7 +64151,7 @@ function stringifyQuery(query) {
             continue;
         }
         // keep null values
-        const values = isArray(value)
+        const values = Array.isArray(value)
             ? value.map(v => v && encodeQueryValue(v))
             : [value && encodeQueryValue(value)];
         values.forEach(value => {
@@ -64434,7 +64180,7 @@ function normalizeQuery(query) {
     for (const key in query) {
         const value = query[key];
         if (value !== undefined) {
-            normalizedQuery[key] = isArray(value)
+            normalizedQuery[key] = Array.isArray(value)
                 ? value.map(v => (v == null ? null : '' + v))
                 : value == null
                     ? value
@@ -64443,43 +64189,6 @@ function normalizeQuery(query) {
     }
     return normalizedQuery;
 }
-
-/**
- * RouteRecord being rendered by the closest ancestor Router View. Used for
- * `onBeforeRouteUpdate` and `onBeforeRouteLeave`. rvlm stands for Router View
- * Location Matched
- *
- * @internal
- */
-const matchedRouteKey = Symbol(( true) ? 'router view location matched' : 0);
-/**
- * Allows overriding the router view depth to control which component in
- * `matched` is rendered. rvd stands for Router View Depth
- *
- * @internal
- */
-const viewDepthKey = Symbol(( true) ? 'router view depth' : 0);
-/**
- * Allows overriding the router instance returned by `useRouter` in tests. r
- * stands for router
- *
- * @internal
- */
-const routerKey = Symbol(( true) ? 'router' : 0);
-/**
- * Allows overriding the current route returned by `useRoute` in tests. rl
- * stands for route location
- *
- * @internal
- */
-const routeLocationKey = Symbol(( true) ? 'route location' : 0);
-/**
- * Allows overriding the current route used by router-view. Internally this is
- * used when the `route` prop is passed.
- *
- * @internal
- */
-const routerViewLocationKey = Symbol(( true) ? 'router view location' : 0);
 
 /**
  * Create a list of callbacks that can be reset. Used to create before and after navigation guards list
@@ -64532,7 +64241,7 @@ function onBeforeRouteLeave(leaveGuard) {
     {}).value;
     if (!activeRecord) {
         ( true) &&
-            warn('No active route record was found when calling `onBeforeRouteLeave()`. Make sure you call this function inside a component child of <router-view>. Maybe you called it inside of App.vue?');
+            warn('No active route record was found when calling `onBeforeRouteLeave()`. Make sure you call this function inside of a component child of <router-view>. Maybe you called it inside of App.vue?');
         return;
     }
     registerGuard(activeRecord, 'leaveGuards', leaveGuard);
@@ -64554,7 +64263,7 @@ function onBeforeRouteUpdate(updateGuard) {
     {}).value;
     if (!activeRecord) {
         ( true) &&
-            warn('No active route record was found when calling `onBeforeRouteUpdate()`. Make sure you call this function inside a component child of <router-view>. Maybe you called it inside of App.vue?');
+            warn('No active route record was found when calling `onBeforeRouteUpdate()`. Make sure you call this function inside of a component child of <router-view>. Maybe you called it inside of App.vue?');
         return;
     }
     registerGuard(activeRecord, 'updateGuards', updateGuard);
@@ -64566,17 +64275,16 @@ function guardToPromiseFn(guard, to, from, record, name) {
         (record.enterCallbacks[name] = record.enterCallbacks[name] || []);
     return () => new Promise((resolve, reject) => {
         const next = (valid) => {
-            if (valid === false) {
-                reject(createRouterError(4 /* ErrorTypes.NAVIGATION_ABORTED */, {
+            if (valid === false)
+                reject(createRouterError(4 /* NAVIGATION_ABORTED */, {
                     from,
                     to,
                 }));
-            }
             else if (valid instanceof Error) {
                 reject(valid);
             }
             else if (isRouteLocation(valid)) {
-                reject(createRouterError(2 /* ErrorTypes.NAVIGATION_GUARD_REDIRECT */, {
+                reject(createRouterError(2 /* NAVIGATION_GUARD_REDIRECT */, {
                     from: to,
                     to: valid,
                 }));
@@ -64585,9 +64293,8 @@ function guardToPromiseFn(guard, to, from, record, name) {
                 if (enterCallbackArray &&
                     // since enterCallbackArray is truthy, both record and name also are
                     record.enterCallbacks[name] === enterCallbackArray &&
-                    typeof valid === 'function') {
+                    typeof valid === 'function')
                     enterCallbackArray.push(valid);
-                }
                 resolve();
             }
         };
@@ -64607,6 +64314,7 @@ function guardToPromiseFn(guard, to, from, record, name) {
                     }
                     return resolvedValue;
                 });
+                // TODO: test me!
             }
             else if (guardReturn !== undefined) {
                 // @ts-expect-error: _called is added at canOnlyBeCalledOnce
@@ -64634,10 +64342,6 @@ function canOnlyBeCalledOnce(next, to, from) {
 function extractComponentsGuards(matched, guardType, to, from) {
     const guards = [];
     for (const record of matched) {
-        if (( true) && !record.components && !record.children.length) {
-            warn(`Record with path "${record.path}" is either missing a "component(s)"` +
-                ` or "children" property.`);
-        }
         for (const name in record.components) {
             let rawComponent = record.components[name];
             if ((true)) {
@@ -64694,7 +64398,6 @@ function extractComponentsGuards(matched, guardType, to, from) {
                         ? resolved.default
                         : resolved;
                     // replace the function with the resolved component
-                    // cannot be null or undefined because we went into the for loop
                     record.components[name] = resolvedComponent;
                     // __vccOpts is added by vue-class-component and contain the regular options
                     const options = resolvedComponent.__vccOpts || resolvedComponent;
@@ -64708,7 +64411,6 @@ function extractComponentsGuards(matched, guardType, to, from) {
 }
 /**
  * Allows differentiating lazy components from functional components and vue-class-component
- * @internal
  *
  * @param component
  */
@@ -64717,34 +64419,6 @@ function isRouteComponent(component) {
         'displayName' in component ||
         'props' in component ||
         '__vccOpts' in component);
-}
-/**
- * Ensures a route is loaded, so it can be passed as o prop to `<RouterView>`.
- *
- * @param route - resolved route to load
- */
-function loadRouteLocation(route) {
-    return route.matched.every(record => record.redirect)
-        ? Promise.reject(new Error('Cannot load a route that redirects.'))
-        : Promise.all(route.matched.map(record => record.components &&
-            Promise.all(Object.keys(record.components).reduce((promises, name) => {
-                const rawComponent = record.components[name];
-                if (typeof rawComponent === 'function' &&
-                    !('displayName' in rawComponent)) {
-                    promises.push(rawComponent().then(resolved => {
-                        if (!resolved)
-                            return Promise.reject(new Error(`Couldn't resolve component "${name}" at "${record.path}". Ensure you passed a function that returns a promise.`));
-                        const resolvedComponent = isESModule(resolved)
-                            ? resolved.default
-                            : resolved;
-                        // replace the function with the resolved component
-                        // cannot be null or undefined because we went into the for loop
-                        record.components[name] = resolvedComponent;
-                        return;
-                    }));
-                }
-                return promises;
-            }, [])))).then(() => route);
 }
 
 // TODO: we could allow currentRoute as a prop to expose `isActive` and
@@ -64820,7 +64494,6 @@ function useLink(props) {
 }
 const RouterLinkImpl = /*#__PURE__*/ (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     name: 'RouterLink',
-    compatConfig: { MODE: 3 },
     props: {
         to: {
             type: [String, Object],
@@ -64859,7 +64532,7 @@ const RouterLinkImpl = /*#__PURE__*/ (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineC
                         : null,
                     href: link.href,
                     // this would override user added attrs but Vue will still add
-                    // the listener, so we end up triggering both
+                    // the listener so we end up triggering both
                     onClick: link.navigate,
                     class: elClass.value,
                 }, children);
@@ -64904,7 +64577,7 @@ function includesParams(outer, inner) {
                 return false;
         }
         else {
-            if (!isArray(outerValue) ||
+            if (!Array.isArray(outerValue) ||
                 outerValue.length !== innerValue.length ||
                 innerValue.some((value, i) => value !== outerValue[i]))
                 return false;
@@ -64942,28 +64615,13 @@ const RouterViewImpl = /*#__PURE__*/ (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineC
         },
         route: Object,
     },
-    // Better compat for @vue/compat users
-    // https://github.com/vuejs/router/issues/1315
-    compatConfig: { MODE: 3 },
     setup(props, { attrs, slots }) {
         ( true) && warnDeprecatedUsage();
         const injectedRoute = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(routerViewLocationKey);
         const routeToDisplay = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => props.route || injectedRoute.value);
-        const injectedDepth = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(viewDepthKey, 0);
-        // The depth changes based on empty components option, which allows passthrough routes e.g. routes with children
-        // that are used to reuse the `path` property
-        const depth = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-            let initialDepth = (0,vue__WEBPACK_IMPORTED_MODULE_0__.unref)(injectedDepth);
-            const { matched } = routeToDisplay.value;
-            let matchedRoute;
-            while ((matchedRoute = matched[initialDepth]) &&
-                !matchedRoute.components) {
-                initialDepth++;
-            }
-            return initialDepth;
-        });
-        const matchedRouteRef = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => routeToDisplay.value.matched[depth.value]);
-        (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)(viewDepthKey, (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => depth.value + 1));
+        const depth = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(viewDepthKey, 0);
+        const matchedRouteRef = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => routeToDisplay.value.matched[depth]);
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)(viewDepthKey, depth + 1);
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)(matchedRouteKey, matchedRouteRef);
         (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)(routerViewLocationKey, routeToDisplay);
         const viewRef = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)();
@@ -64975,7 +64633,7 @@ const RouterViewImpl = /*#__PURE__*/ (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineC
                 // this will update the instance for new instances as well as reused
                 // instances when navigating to a new route
                 to.instances[name] = instance;
-                // the component instance is reused for a different route or name, so
+                // the component instance is reused for a different route or name so
                 // we copy any saved update or leave guards. With async setup, the
                 // mounting component will mount before the matchedRoute changes,
                 // making instance === oldInstance, so we check if guards have been
@@ -65001,16 +64659,16 @@ const RouterViewImpl = /*#__PURE__*/ (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineC
         }, { flush: 'post' });
         return () => {
             const route = routeToDisplay.value;
+            const matchedRoute = matchedRouteRef.value;
+            const ViewComponent = matchedRoute && matchedRoute.components[props.name];
             // we need the value at the time we render because when we unmount, we
             // navigated to a different location so the value is different
             const currentName = props.name;
-            const matchedRoute = matchedRouteRef.value;
-            const ViewComponent = matchedRoute && matchedRoute.components[currentName];
             if (!ViewComponent) {
                 return normalizeSlot(slots.default, { Component: ViewComponent, route });
             }
             // props from route configuration
-            const routePropsOption = matchedRoute.props[currentName];
+            const routePropsOption = matchedRoute.props[props.name];
             const routeProps = routePropsOption
                 ? routePropsOption === true
                     ? route.params
@@ -65033,12 +64691,12 @@ const RouterViewImpl = /*#__PURE__*/ (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineC
                 component.ref) {
                 // TODO: can display if it's an alias, its props
                 const info = {
-                    depth: depth.value,
+                    depth,
                     name: matchedRoute.name,
                     path: matchedRoute.path,
                     meta: matchedRoute.meta,
                 };
-                const internalInstances = isArray(component.ref)
+                const internalInstances = Array.isArray(component.ref)
                     ? component.ref.map(r => r.i)
                     : [component.ref.i];
                 internalInstances.forEach(instance => {
@@ -65084,13 +64742,6 @@ function warnDeprecatedUsage() {
     }
 }
 
-/**
- * Copies a route location and removes any problematic properties that cannot be shown in devtools (e.g. Vue instances).
- *
- * @param routeLocation - routeLocation to format
- * @param tooltip - optional tooltip
- * @returns a copy of the routeLocation
- */
 function formatRouteLocation(routeLocation, tooltip) {
     const copy = assign({}, routeLocation, {
         // remove variables that can contain vue instances
@@ -65132,9 +64783,6 @@ function addDevtools(app, router, matcher) {
         componentStateTypes: ['Routing'],
         app,
     }, api => {
-        if (typeof api.now !== 'function') {
-            console.warn('[Vue Router]: You seem to be using an outdated version of Vue Devtools. Are you still using the Beta release instead of the stable one? You can find the links at https://devtools.vuejs.org/guide/installation.html.');
-        }
         // display state added by the router
         api.on.inspectComponent((payload, ctx) => {
             if (payload.instanceData) {
@@ -65158,7 +64806,7 @@ function addDevtools(app, router, matcher) {
                 });
             }
             // if multiple useLink are used
-            if (isArray(componentInstance.__vrl_devtools)) {
+            if (Array.isArray(componentInstance.__vrl_devtools)) {
                 componentInstance.__devtoolsApi = api;
                 componentInstance.__vrl_devtools.forEach(devtoolsData => {
                     let backgroundColor = ORANGE_400;
@@ -65206,7 +64854,7 @@ function addDevtools(app, router, matcher) {
                     title: 'Error during Navigation',
                     subtitle: to.fullPath,
                     logType: 'error',
-                    time: api.now(),
+                    time: Date.now(),
                     data: { error },
                     groupId: to.meta.__navigationId,
                 },
@@ -65227,7 +64875,7 @@ function addDevtools(app, router, matcher) {
             api.addTimelineEvent({
                 layerId: navigationsLayerId,
                 event: {
-                    time: api.now(),
+                    time: Date.now(),
                     title: 'Start of navigation',
                     subtitle: to.fullPath,
                     data,
@@ -65262,7 +64910,7 @@ function addDevtools(app, router, matcher) {
                 event: {
                     title: 'End of navigation',
                     subtitle: to.fullPath,
-                    time: api.now(),
+                    time: Date.now(),
                     data,
                     logType: failure ? 'warning' : 'default',
                     groupId: to.meta.__navigationId,
@@ -65375,13 +65023,6 @@ function formatRouteRecordMatcherForStateInspector(route) {
             value: route.alias.map(alias => alias.record.path),
         });
     }
-    if (Object.keys(route.record.meta).length) {
-        fields.push({
-            editable: false,
-            key: 'meta',
-            value: route.record.meta,
-        });
-    }
     fields.push({
         key: 'score',
         editable: false,
@@ -65447,9 +65088,8 @@ function formatRouteRecordForInspector(route) {
     }
     if (record.redirect) {
         tags.push({
-            label: typeof record.redirect === 'string'
-                ? `redirect: ${record.redirect}`
-                : 'redirects',
+            label: 'redirect: ' +
+                (typeof record.redirect === 'string' ? record.redirect : 'Object'),
             textColor: 0xffffff,
             backgroundColor: DARK,
         });
@@ -65629,7 +65269,7 @@ function createRouter(options) {
                     delete targetParams[key];
                 }
             }
-            // pass encoded values to the matcher, so it can produce encoded path and fullPath
+            // pass encoded values to the matcher so it can produce encoded path and fullPath
             matcherLocation = assign({}, rawLocation, {
                 params: encodeParams(rawLocation.params),
             });
@@ -65642,7 +65282,7 @@ function createRouter(options) {
         if (( true) && hash && !hash.startsWith('#')) {
             warn(`A \`hash\` should always start with the character "#". Replace "${hash}" with "#${hash}".`);
         }
-        // the matcher might have merged current location params, so
+        // decoding them) the matcher might have merged current location params so
         // we need to run the decoding again
         matchedRoute.params = normalizeParams(decodeParams(matchedRoute.params));
         const fullPath = stringifyURL(stringifyQuery$1, assign({}, rawLocation, {
@@ -65684,7 +65324,7 @@ function createRouter(options) {
     }
     function checkCanceledNavigation(to, from) {
         if (pendingLocation !== to) {
-            return createRouterError(8 /* ErrorTypes.NAVIGATION_CANCELLED */, {
+            return createRouterError(8 /* NAVIGATION_CANCELLED */, {
                 from,
                 to,
             });
@@ -65720,8 +65360,7 @@ function createRouter(options) {
             return assign({
                 query: to.query,
                 hash: to.hash,
-                // avoid transferring params if the redirect has a path
-                params: 'path' in newTargetLocation ? {} : to.params,
+                params: to.params,
             }, newTargetLocation);
         }
     }
@@ -65735,9 +65374,7 @@ function createRouter(options) {
         const shouldRedirect = handleRedirectRecord(targetLocation);
         if (shouldRedirect)
             return pushWithRedirect(assign(locationAsObject(shouldRedirect), {
-                state: typeof shouldRedirect === 'object'
-                    ? assign({}, data, shouldRedirect.state)
-                    : data,
+                state: data,
                 force,
                 replace,
             }), 
@@ -65748,7 +65385,7 @@ function createRouter(options) {
         toLocation.redirectedFrom = redirectedFrom;
         let failure;
         if (!force && isSameRouteLocation(stringifyQuery$1, from, targetLocation)) {
-            failure = createRouterError(16 /* ErrorTypes.NAVIGATION_DUPLICATED */, { to: toLocation, from });
+            failure = createRouterError(16 /* NAVIGATION_DUPLICATED */, { to: toLocation, from });
             // trigger scroll to allow scrolling to the same anchor
             handleScroll(from, from, 
             // this is a push, the only way for it to be triggered from a
@@ -65761,14 +65398,14 @@ function createRouter(options) {
         return (failure ? Promise.resolve(failure) : navigate(toLocation, from))
             .catch((error) => isNavigationFailure(error)
             ? // navigation redirects still mark the router as ready
-                isNavigationFailure(error, 2 /* ErrorTypes.NAVIGATION_GUARD_REDIRECT */)
+                isNavigationFailure(error, 2 /* NAVIGATION_GUARD_REDIRECT */)
                     ? error
                     : markAsReady(error) // also returns the error
             : // reject any unknown error
                 triggerError(error, toLocation, from))
             .then((failure) => {
             if (failure) {
-                if (isNavigationFailure(failure, 2 /* ErrorTypes.NAVIGATION_GUARD_REDIRECT */)) {
+                if (isNavigationFailure(failure, 2 /* NAVIGATION_GUARD_REDIRECT */)) {
                     if (( true) &&
                         // we are redirecting to the same location we were already at
                         isSameRouteLocation(stringifyQuery$1, resolve(failure.to), toLocation) &&
@@ -65784,14 +65421,10 @@ function createRouter(options) {
                     }
                     return pushWithRedirect(
                     // keep options
-                    assign({
-                        // preserve an existing replacement but allow the redirect to override it
-                        replace,
-                    }, locationAsObject(failure.to), {
-                        state: typeof failure.to === 'object'
-                            ? assign({}, data, failure.to.state)
-                            : data,
+                    assign(locationAsObject(failure.to), {
+                        state: data,
                         force,
+                        replace,
                     }), 
                     // preserve the original redirectedFrom if any
                     redirectedFrom || toLocation);
@@ -65857,7 +65490,7 @@ function createRouter(options) {
             for (const record of to.matched) {
                 // do not trigger beforeEnter on reused views
                 if (record.beforeEnter && !from.matched.includes(record)) {
-                    if (isArray(record.beforeEnter)) {
+                    if (Array.isArray(record.beforeEnter)) {
                         for (const beforeEnter of record.beforeEnter)
                             guards.push(guardToPromiseFn(beforeEnter, to, from));
                     }
@@ -65890,7 +65523,7 @@ function createRouter(options) {
             return runGuardQueue(guards);
         })
             // catch any navigation canceled
-            .catch(err => isNavigationFailure(err, 8 /* ErrorTypes.NAVIGATION_CANCELLED */)
+            .catch(err => isNavigationFailure(err, 8 /* NAVIGATION_CANCELLED */)
             ? err
             : Promise.reject(err)));
     }
@@ -65933,12 +65566,7 @@ function createRouter(options) {
     let removeHistoryListener;
     // attach listener to history to trigger navigations
     function setupListeners() {
-        // avoid setting up listeners twice due to an invalid first navigation
-        if (removeHistoryListener)
-            return;
         removeHistoryListener = routerHistory.listen((to, _from, info) => {
-            if (!router.listening)
-                return;
             // cannot be a redirect route because it was in history
             const toLocation = resolve(to);
             // due to dynamic routing, and to hash history with manual navigation
@@ -65957,15 +65585,15 @@ function createRouter(options) {
             }
             navigate(toLocation, from)
                 .catch((error) => {
-                if (isNavigationFailure(error, 4 /* ErrorTypes.NAVIGATION_ABORTED */ | 8 /* ErrorTypes.NAVIGATION_CANCELLED */)) {
+                if (isNavigationFailure(error, 4 /* NAVIGATION_ABORTED */ | 8 /* NAVIGATION_CANCELLED */)) {
                     return error;
                 }
-                if (isNavigationFailure(error, 2 /* ErrorTypes.NAVIGATION_GUARD_REDIRECT */)) {
+                if (isNavigationFailure(error, 2 /* NAVIGATION_GUARD_REDIRECT */)) {
                     // Here we could call if (info.delta) routerHistory.go(-info.delta,
                     // false) but this is bug prone as we have no way to wait the
                     // navigation to be finished before calling pushWithRedirect. Using
-                    // a setTimeout of 16ms seems to work but there is no guarantee for
-                    // it to work on every browser. So instead we do not restore the
+                    // a setTimeout of 16ms seems to work but there is not guarantee for
+                    // it to work on every browser. So Instead we do not restore the
                     // history entry and trigger a new navigation as requested by the
                     // navigation guard.
                     // the error is already handled by router.push we just want to avoid
@@ -65975,10 +65603,10 @@ function createRouter(options) {
                     )
                         .then(failure => {
                         // manual change in hash history #916 ending up in the URL not
-                        // changing, but it was changed by the manual url change, so we
+                        // changing but it was changed by the manual url change, so we
                         // need to manually change it ourselves
-                        if (isNavigationFailure(failure, 4 /* ErrorTypes.NAVIGATION_ABORTED */ |
-                            16 /* ErrorTypes.NAVIGATION_DUPLICATED */) &&
+                        if (isNavigationFailure(failure, 4 /* NAVIGATION_ABORTED */ |
+                            16 /* NAVIGATION_DUPLICATED */) &&
                             !info.delta &&
                             info.type === NavigationType.pop) {
                             routerHistory.go(-1, false);
@@ -65989,9 +65617,8 @@ function createRouter(options) {
                     return Promise.reject();
                 }
                 // do not restore history on unknown direction
-                if (info.delta) {
+                if (info.delta)
                     routerHistory.go(-info.delta, false);
-                }
                 // unrecognized error, transfer to the global handler
                 return triggerError(error, toLocation, from);
             })
@@ -66003,14 +65630,11 @@ function createRouter(options) {
                         toLocation, from, false);
                 // revert the navigation
                 if (failure) {
-                    if (info.delta &&
-                        // a new navigation has been triggered, so we do not want to revert, that will change the current history
-                        // entry while a different route is displayed
-                        !isNavigationFailure(failure, 8 /* ErrorTypes.NAVIGATION_CANCELLED */)) {
+                    if (info.delta) {
                         routerHistory.go(-info.delta, false);
                     }
                     else if (info.type === NavigationType.pop &&
-                        isNavigationFailure(failure, 4 /* ErrorTypes.NAVIGATION_ABORTED */ | 16 /* ErrorTypes.NAVIGATION_DUPLICATED */)) {
+                        isNavigationFailure(failure, 4 /* NAVIGATION_ABORTED */ | 16 /* NAVIGATION_DUPLICATED */)) {
                         // manual change in hash history #916
                         // it's like a push but lacks the information of the direction
                         routerHistory.go(-1, false);
@@ -66086,7 +65710,6 @@ function createRouter(options) {
     const installedApps = new Set();
     const router = {
         currentRoute,
-        listening: true,
         addRoute,
         removeRoute,
         hasRoute,
@@ -66144,14 +65767,12 @@ function createRouter(options) {
                     // invalidate the current navigation
                     pendingLocation = START_LOCATION_NORMALIZED;
                     removeHistoryListener && removeHistoryListener();
-                    removeHistoryListener = null;
                     currentRoute.value = START_LOCATION_NORMALIZED;
                     started = false;
                     ready = false;
                 }
                 unmountApp();
             };
-            // TODO: this probably needs to be updated so it can be used by vue-termui
             if (( true) && isBrowser) {
                 addDevtools(app, router, matcher);
             }
@@ -66200,6 +65821,236 @@ function useRouter() {
 function useRoute() {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(routeLocationKey);
 }
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue/dist/vue.esm-bundler.js":
+/*!**************************************************!*\
+  !*** ./node_modules/vue/dist/vue.esm-bundler.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "BaseTransition": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.BaseTransition),
+/* harmony export */   "Comment": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.Comment),
+/* harmony export */   "EffectScope": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.EffectScope),
+/* harmony export */   "Fragment": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.Fragment),
+/* harmony export */   "KeepAlive": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.KeepAlive),
+/* harmony export */   "ReactiveEffect": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.ReactiveEffect),
+/* harmony export */   "Static": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.Static),
+/* harmony export */   "Suspense": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.Suspense),
+/* harmony export */   "Teleport": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.Teleport),
+/* harmony export */   "Text": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.Text),
+/* harmony export */   "Transition": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.Transition),
+/* harmony export */   "TransitionGroup": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.TransitionGroup),
+/* harmony export */   "VueElement": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.VueElement),
+/* harmony export */   "callWithAsyncErrorHandling": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.callWithAsyncErrorHandling),
+/* harmony export */   "callWithErrorHandling": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.callWithErrorHandling),
+/* harmony export */   "camelize": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.camelize),
+/* harmony export */   "capitalize": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.capitalize),
+/* harmony export */   "cloneVNode": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.cloneVNode),
+/* harmony export */   "compatUtils": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.compatUtils),
+/* harmony export */   "compile": () => (/* binding */ compileToFunction),
+/* harmony export */   "computed": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.computed),
+/* harmony export */   "createApp": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createApp),
+/* harmony export */   "createBlock": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createBlock),
+/* harmony export */   "createCommentVNode": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode),
+/* harmony export */   "createElementBlock": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createElementBlock),
+/* harmony export */   "createElementVNode": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createElementVNode),
+/* harmony export */   "createHydrationRenderer": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createHydrationRenderer),
+/* harmony export */   "createPropsRestProxy": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createPropsRestProxy),
+/* harmony export */   "createRenderer": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createRenderer),
+/* harmony export */   "createSSRApp": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createSSRApp),
+/* harmony export */   "createSlots": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createSlots),
+/* harmony export */   "createStaticVNode": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode),
+/* harmony export */   "createTextVNode": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createTextVNode),
+/* harmony export */   "createVNode": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.createVNode),
+/* harmony export */   "customRef": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.customRef),
+/* harmony export */   "defineAsyncComponent": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.defineAsyncComponent),
+/* harmony export */   "defineComponent": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.defineComponent),
+/* harmony export */   "defineCustomElement": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.defineCustomElement),
+/* harmony export */   "defineEmits": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.defineEmits),
+/* harmony export */   "defineExpose": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.defineExpose),
+/* harmony export */   "defineProps": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.defineProps),
+/* harmony export */   "defineSSRCustomElement": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.defineSSRCustomElement),
+/* harmony export */   "devtools": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.devtools),
+/* harmony export */   "effect": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.effect),
+/* harmony export */   "effectScope": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.effectScope),
+/* harmony export */   "getCurrentInstance": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.getCurrentInstance),
+/* harmony export */   "getCurrentScope": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.getCurrentScope),
+/* harmony export */   "getTransitionRawChildren": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.getTransitionRawChildren),
+/* harmony export */   "guardReactiveProps": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.guardReactiveProps),
+/* harmony export */   "h": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.h),
+/* harmony export */   "handleError": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.handleError),
+/* harmony export */   "hydrate": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.hydrate),
+/* harmony export */   "initCustomFormatter": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.initCustomFormatter),
+/* harmony export */   "initDirectivesForSSR": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.initDirectivesForSSR),
+/* harmony export */   "inject": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.inject),
+/* harmony export */   "isMemoSame": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isMemoSame),
+/* harmony export */   "isProxy": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isProxy),
+/* harmony export */   "isReactive": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isReactive),
+/* harmony export */   "isReadonly": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isReadonly),
+/* harmony export */   "isRef": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isRef),
+/* harmony export */   "isRuntimeOnly": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isRuntimeOnly),
+/* harmony export */   "isShallow": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isShallow),
+/* harmony export */   "isVNode": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.isVNode),
+/* harmony export */   "markRaw": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.markRaw),
+/* harmony export */   "mergeDefaults": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.mergeDefaults),
+/* harmony export */   "mergeProps": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.mergeProps),
+/* harmony export */   "nextTick": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.nextTick),
+/* harmony export */   "normalizeClass": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.normalizeClass),
+/* harmony export */   "normalizeProps": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.normalizeProps),
+/* harmony export */   "normalizeStyle": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle),
+/* harmony export */   "onActivated": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onActivated),
+/* harmony export */   "onBeforeMount": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onBeforeMount),
+/* harmony export */   "onBeforeUnmount": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onBeforeUnmount),
+/* harmony export */   "onBeforeUpdate": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onBeforeUpdate),
+/* harmony export */   "onDeactivated": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onDeactivated),
+/* harmony export */   "onErrorCaptured": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onErrorCaptured),
+/* harmony export */   "onMounted": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onMounted),
+/* harmony export */   "onRenderTracked": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onRenderTracked),
+/* harmony export */   "onRenderTriggered": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onRenderTriggered),
+/* harmony export */   "onScopeDispose": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onScopeDispose),
+/* harmony export */   "onServerPrefetch": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onServerPrefetch),
+/* harmony export */   "onUnmounted": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onUnmounted),
+/* harmony export */   "onUpdated": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.onUpdated),
+/* harmony export */   "openBlock": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.openBlock),
+/* harmony export */   "popScopeId": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.popScopeId),
+/* harmony export */   "provide": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.provide),
+/* harmony export */   "proxyRefs": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.proxyRefs),
+/* harmony export */   "pushScopeId": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.pushScopeId),
+/* harmony export */   "queuePostFlushCb": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.queuePostFlushCb),
+/* harmony export */   "reactive": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.reactive),
+/* harmony export */   "readonly": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.readonly),
+/* harmony export */   "ref": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.ref),
+/* harmony export */   "registerRuntimeCompiler": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.registerRuntimeCompiler),
+/* harmony export */   "render": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "renderList": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.renderList),
+/* harmony export */   "renderSlot": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.renderSlot),
+/* harmony export */   "resolveComponent": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.resolveComponent),
+/* harmony export */   "resolveDirective": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.resolveDirective),
+/* harmony export */   "resolveDynamicComponent": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.resolveDynamicComponent),
+/* harmony export */   "resolveFilter": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.resolveFilter),
+/* harmony export */   "resolveTransitionHooks": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.resolveTransitionHooks),
+/* harmony export */   "setBlockTracking": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.setBlockTracking),
+/* harmony export */   "setDevtoolsHook": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.setDevtoolsHook),
+/* harmony export */   "setTransitionHooks": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.setTransitionHooks),
+/* harmony export */   "shallowReactive": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.shallowReactive),
+/* harmony export */   "shallowReadonly": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.shallowReadonly),
+/* harmony export */   "shallowRef": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.shallowRef),
+/* harmony export */   "ssrContextKey": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.ssrContextKey),
+/* harmony export */   "ssrUtils": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.ssrUtils),
+/* harmony export */   "stop": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.stop),
+/* harmony export */   "toDisplayString": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.toDisplayString),
+/* harmony export */   "toHandlerKey": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.toHandlerKey),
+/* harmony export */   "toHandlers": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.toHandlers),
+/* harmony export */   "toRaw": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.toRaw),
+/* harmony export */   "toRef": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.toRef),
+/* harmony export */   "toRefs": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.toRefs),
+/* harmony export */   "transformVNodeArgs": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.transformVNodeArgs),
+/* harmony export */   "triggerRef": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.triggerRef),
+/* harmony export */   "unref": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.unref),
+/* harmony export */   "useAttrs": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.useAttrs),
+/* harmony export */   "useCssModule": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.useCssModule),
+/* harmony export */   "useCssVars": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.useCssVars),
+/* harmony export */   "useSSRContext": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.useSSRContext),
+/* harmony export */   "useSlots": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.useSlots),
+/* harmony export */   "useTransitionState": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.useTransitionState),
+/* harmony export */   "vModelCheckbox": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox),
+/* harmony export */   "vModelDynamic": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.vModelDynamic),
+/* harmony export */   "vModelRadio": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.vModelRadio),
+/* harmony export */   "vModelSelect": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.vModelSelect),
+/* harmony export */   "vModelText": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.vModelText),
+/* harmony export */   "vShow": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.vShow),
+/* harmony export */   "version": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.version),
+/* harmony export */   "warn": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.warn),
+/* harmony export */   "watch": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.watch),
+/* harmony export */   "watchEffect": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.watchEffect),
+/* harmony export */   "watchPostEffect": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.watchPostEffect),
+/* harmony export */   "watchSyncEffect": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.watchSyncEffect),
+/* harmony export */   "withAsyncContext": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withAsyncContext),
+/* harmony export */   "withCtx": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withCtx),
+/* harmony export */   "withDefaults": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withDefaults),
+/* harmony export */   "withDirectives": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withDirectives),
+/* harmony export */   "withKeys": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withKeys),
+/* harmony export */   "withMemo": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withMemo),
+/* harmony export */   "withModifiers": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withModifiers),
+/* harmony export */   "withScopeId": () => (/* reexport safe */ _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__.withScopeId)
+/* harmony export */ });
+/* harmony import */ var _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @vue/runtime-dom */ "./node_modules/@vue/runtime-dom/dist/runtime-dom.esm-bundler.js");
+/* harmony import */ var _vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vue/runtime-dom */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
+/* harmony import */ var _vue_compiler_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @vue/compiler-dom */ "./node_modules/@vue/compiler-dom/dist/compiler-dom.esm-bundler.js");
+/* harmony import */ var _vue_shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @vue/shared */ "./node_modules/@vue/shared/dist/shared.esm-bundler.js");
+
+
+
+
+
+
+function initDev() {
+    {
+        (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.initCustomFormatter)();
+    }
+}
+
+// This entry is the "full-build" that includes both the runtime
+if ((true)) {
+    initDev();
+}
+const compileCache = Object.create(null);
+function compileToFunction(template, options) {
+    if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__.isString)(template)) {
+        if (template.nodeType) {
+            template = template.innerHTML;
+        }
+        else {
+            ( true) && (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.warn)(`invalid template option: `, template);
+            return _vue_shared__WEBPACK_IMPORTED_MODULE_2__.NOOP;
+        }
+    }
+    const key = template;
+    const cached = compileCache[key];
+    if (cached) {
+        return cached;
+    }
+    if (template[0] === '#') {
+        const el = document.querySelector(template);
+        if (( true) && !el) {
+            (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.warn)(`Template element not found or is empty: ${template}`);
+        }
+        // __UNSAFE__
+        // Reason: potential execution of JS expressions in in-DOM template.
+        // The user must make sure the in-DOM template is trusted. If it's rendered
+        // by the server, the template should not contain any user data.
+        template = el ? el.innerHTML : ``;
+    }
+    const { code } = (0,_vue_compiler_dom__WEBPACK_IMPORTED_MODULE_3__.compile)(template, (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__.extend)({
+        hoistStatic: true,
+        onError: ( true) ? onError : 0,
+        onWarn: ( true) ? e => onError(e, true) : 0
+    }, options));
+    function onError(err, asWarning = false) {
+        const message = asWarning
+            ? err.message
+            : `Template compilation error: ${err.message}`;
+        const codeFrame = err.loc &&
+            (0,_vue_shared__WEBPACK_IMPORTED_MODULE_2__.generateCodeFrame)(template, err.loc.start.offset, err.loc.end.offset);
+        (0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.warn)(codeFrame ? `${message}\n${codeFrame}` : message);
+    }
+    // The wildcard import results in a huge object with every export
+    // with keys that cannot be mangled, and can be quite heavy size-wise.
+    // In the global build we know `Vue` is available globally so we can avoid
+    // the wildcard object.
+    const render = (new Function('Vue', code)(_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_0__));
+    render._rc = true;
+    return (compileCache[key] = render);
+}
+(0,_vue_runtime_dom__WEBPACK_IMPORTED_MODULE_1__.registerRuntimeCompiler)(compileToFunction);
 
 
 

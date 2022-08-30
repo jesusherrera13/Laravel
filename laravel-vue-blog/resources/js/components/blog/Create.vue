@@ -50,7 +50,6 @@ export default {
                         if(response.status == 201) router.push('/blogs');
                     })
                     .catch(error => {
-                        console.log(error.response.data.errors);
                         Object.keys(error.response.data.errors).forEach((o) => {
                             this.errors.push(error.response.data.errors[o][0])
                         });
