@@ -1,5 +1,5 @@
 <template>
-    Todo Create
+    Category Create
 </template>
 <script>
     export default {}
