@@ -15,6 +15,7 @@
                 <textarea class="form-control" id="content" rows="3" v-model="todo.content"></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
+            <button class="btn btn-warning" @click="$router.push('/todos')">Cancel</button>
         </form>
     </div>
 </template>
@@ -24,33 +25,30 @@ import axios from 'axios';
     export default {
         data() {
             return {
-                todo: {
-                    title: null,
-                    content: null,
-                },
+                todo: {},
                 errors: []
             }
         },
+        mounted() {
+            this.getData();
+        },
         methods: {
-            
+            async getData() {
+                await axios.get(`${import.meta.env.VITE_API_URL}/api/todo/${this.$route.params.id}`)
+                        .then(response => {
+                            this.todo = response.data;
+                        })
+            },
             async save() {
-                this.errors = [];
-
-                if(!this.todo.title) this.errors.push('Write the title');
-                if(!this.todo.content) this.errors.push('Write the content');
-
-                if(this.errors.length) return false;
-
-                await axios.post(`${import.meta.env.VITE_API_URL}/api/todo`, this.todo)
-                    .then(response=> {
-
-                    })
-                    .catch(error=> {
-                        error.response.errors.forEach(k => {
-                            this.errors.push(error.response.errors[k][0])
-                        });
-                    });
-
+                await axios.put(`${import.meta.env.VITE_API_URL}/api/todo/${this.$route.params.id}`, this.todo)
+                        .then(response => {
+                            if(response.status == 200) this.$router.push('/todos')
+                        })
+                        .catch(error => {
+                            error.response.errors.forEach(k => {
+                                this.errors.push(error.response.errors[k][0]);
+                            })
+                        })
             }
         }
     }

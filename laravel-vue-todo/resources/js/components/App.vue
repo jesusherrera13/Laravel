@@ -5,6 +5,9 @@
                 <li class="nav-item">
                     <router-link :to="{name:'home'}"  class="nav-link active" aria-current="page">Home</router-link>
                 </li>
+                <li>
+                    <router-link :to="{name:'todos'}" class="nav-link">Todos</router-link>
+                </li>
                 <li class="nav-item">
                     <router-link :to="{name:'categories'}" class="nav-link">Categories</router-link>
                 </li>
